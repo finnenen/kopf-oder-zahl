@@ -91,6 +91,7 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         opacity: 0;
+        transition: opacity 0.5s ease;
         background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
         background-size: 200% auto;
         -webkit-background-clip: text;
@@ -101,14 +102,12 @@
 
     .show {
         opacity: 1;
-        animation: popAggressive 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-                   glow 2s linear infinite, gradientShift 5s ease infinite;
+        animation: fadeInScale 0.5s ease, glow 2s linear infinite, gradientShift 5s ease infinite;
     }
 
-    @keyframes popAggressive {
-        0% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
-        60% { opacity: 1; transform: scale(1.3) rotate(10deg); }
-        100% { transform: scale(1) rotate(0deg); }
+    @keyframes fadeInScale {
+        0% { opacity: 0; transform: scale(0.7); }
+        100% { opacity: 1; transform: scale(1); }
     }
 
     @keyframes gradientShift {
@@ -173,16 +172,16 @@
     const videoContainer = document.getElementById("videoBackground");
     const videos = [];
 
-    videoFiles.forEach((src, index) => {
+    videoFiles.forEach(src => {
         const video = document.createElement("video");
         video.src = src;
         video.autoplay = true;
         video.loop = true;
         video.volume = 1.0;
         video.playsInline = true;
-        video.muted = false; // direkt mit Ton starten
-        video.style.zIndex = index;
 
+        // Sound erlauben erst nach User-Interaktion
+        video.muted = true;
         videoContainer.appendChild(video);
 
         videos.push({
@@ -211,13 +210,10 @@
     }
     animateVideos();
 
-    // Alle 2 Sekunden Z-Index durchrotieren
-    let zCounter = videos.length;
-    setInterval(() => {
-        const v = videos.shift();
-        v.el.style.zIndex = ++zCounter;
-        videos.push(v);
-    }, 2000);
+    // Sound freischalten nach erstem Klick
+    document.body.addEventListener("click", () => {
+        videos.forEach(v => v.el.muted = false);
+    }, { once: true });
 
     /* ------------------- SPIEL-LOGIK ------------------- */
     const startScreen = document.getElementById('startScreen');
@@ -251,22 +247,27 @@
     document.getElementById('magicButton').addEventListener('click', () => {
         const btn = document.getElementById('magicButton');
         const nameDisplay = document.getElementById('nameDisplay');
+        btn.classList.add('pulsing');
         nameDisplay.classList.remove('show');
         setTimeout(() => {
+            btn.classList.remove('pulsing');
             const randomName = names[Math.floor(Math.random() * names.length)];
             nameDisplay.textContent = randomName;
             nameDisplay.classList.add('show');
-        }, 500);
+        }, 2000);
     });
 
     document.getElementById('flipCoinBtn').addEventListener('click', () => {
+        const btn = document.getElementById('flipCoinBtn');
         const coinResult = document.getElementById('coinResult');
+        btn.classList.add('pulsing');
         coinResult.classList.remove('show');
         setTimeout(() => {
+            btn.classList.remove('pulsing');
             const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
             coinResult.textContent = result;
             coinResult.classList.add('show');
-        }, 500);
+        }, 2000);
     });
 </script>
 </body>
