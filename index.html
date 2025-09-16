@@ -1,4 +1,4 @@
-Mediaedia!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -29,16 +29,15 @@ Mediaedia!DOCTYPE html>
         height: 100%;
         overflow: hidden;
         z-index: 0;
-        pointer-events: none; /* verhindert Klicks */
+        pointer-events: none;
     }
 
     #videoBackground video {
         position: absolute;
-        width: 200px;
-        height: 120px;
+        width: 220px;
+        height: 140px;
         object-fit: cover;
         border-radius: 12px;
-        opacity: 0.8;
         box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
@@ -84,7 +83,51 @@ Mediaedia!DOCTYPE html>
     }
     button:active { transform: translateY(-1px); }
 
-    /* ... alle deine bestehenden Styles bleiben unverändert ... */
+    /* --- Ergebnis-Text (Random + Münze) --- */
+    .name, .coin-result {
+        margin-top: 40px;
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glow 2s linear infinite, gradientShift 5s ease infinite;
+        text-shadow: 0 0 20px rgba(255,255,255,0.6);
+    }
+
+    .show {
+        opacity: 1;
+        animation: fadeInScale 0.5s ease, glow 2s linear infinite, gradientShift 5s ease infinite;
+    }
+
+    @keyframes fadeInScale {
+        0% { opacity: 0; transform: scale(0.7); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes glow {
+        0% { text-shadow: 0 0 10px #fff, 0 0 20px #ff0080; }
+        50% { text-shadow: 0 0 20px #40e0d0, 0 0 30px #ff8c00; }
+        100% { text-shadow: 0 0 10px #fff, 0 0 20px #ff0080; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        button { min-width: 250px; }
+        h1 { font-size: 2rem; }
+        .name, .coin-result { font-size: 2.2rem; }
+    }
 </style>
 </head>
 <body>
@@ -134,28 +177,30 @@ Mediaedia!DOCTYPE html>
         video.src = src;
         video.autoplay = true;
         video.loop = true;
+        video.volume = 1.0;
+        video.playsInline = true;
+
+        // Sound erlauben erst nach User-Interaktion
         video.muted = true;
-        video.play();
         videoContainer.appendChild(video);
 
-        // Zufalls-Startposition + Richtung
         videos.push({
             el: video,
-            x: Math.random() * (window.innerWidth - 200),
-            y: Math.random() * (window.innerHeight - 120),
+            x: Math.random() * (window.innerWidth - 220),
+            y: Math.random() * (window.innerHeight - 140),
             dx: (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2),
             dy: (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2),
-            w: 200,
-            h: 120
+            w: 220,
+            h: 140
         });
     });
 
+    // Bewegung
     function animateVideos() {
         videos.forEach(v => {
             v.x += v.dx;
             v.y += v.dy;
 
-            // Kollision mit Rändern
             if (v.x <= 0 || v.x + v.w >= window.innerWidth) v.dx *= -1;
             if (v.y <= 0 || v.y + v.h >= window.innerHeight) v.dy *= -1;
 
@@ -165,62 +210,60 @@ Mediaedia!DOCTYPE html>
     }
     animateVideos();
 
-    /* ------------------- DEIN SPIEL-CODE ------------------- */
-    const app = document.getElementById('app');
+    // Sound freischalten nach erstem Klick
+    document.body.addEventListener("click", () => {
+        videos.forEach(v => v.el.muted = false);
+    }, { once: true });
+
+    /* ------------------- SPIEL-LOGIK ------------------- */
     const startScreen = document.getElementById('startScreen');
     const coinGame = document.getElementById('coinGame');
     const randomGame = document.getElementById('randomGame');
 
-    const coinGameBtn = document.getElementById('coinGameBtn');
-    const randomGameBtn = document.getElementById('randomGameBtn');
-
-    const backFromCoin = document.getElementById('backFromCoin');
-    const backFromRandom = document.getElementById('backFromRandom');
-
-    const names = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
-
-    coinGameBtn.onclick = () => {
+    document.getElementById('coinGameBtn').onclick = () => {
         startScreen.style.display = 'none';
         coinGame.style.display = 'block';
     };
 
-    randomGameBtn.onclick = () => {
+    document.getElementById('randomGameBtn').onclick = () => {
         startScreen.style.display = 'none';
         randomGame.style.display = 'block';
     };
 
-    backFromCoin.onclick = () => {
+    document.getElementById('backFromCoin').onclick = () => {
         coinGame.style.display = 'none';
         startScreen.style.display = 'block';
         document.getElementById('coinResult').classList.remove('show');
     };
 
-    backFromRandom.onclick = () => {
+    document.getElementById('backFromRandom').onclick = () => {
         randomGame.style.display = 'none';
         startScreen.style.display = 'block';
         document.getElementById('nameDisplay').classList.remove('show');
     };
 
-    const magicButton = document.getElementById('magicButton');
-    const nameDisplay = document.getElementById('nameDisplay');
-    magicButton.addEventListener('click', () => {
-        magicButton.classList.add('pulsing');
+    const names = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
+
+    document.getElementById('magicButton').addEventListener('click', () => {
+        const btn = document.getElementById('magicButton');
+        const nameDisplay = document.getElementById('nameDisplay');
+        btn.classList.add('pulsing');
         nameDisplay.classList.remove('show');
         setTimeout(() => {
-            magicButton.classList.remove('pulsing');
+            btn.classList.remove('pulsing');
             const randomName = names[Math.floor(Math.random() * names.length)];
             nameDisplay.textContent = randomName;
             nameDisplay.classList.add('show');
         }, 2000);
     });
 
-    const flipCoinBtn = document.getElementById('flipCoinBtn');
-    const coinResult = document.getElementById('coinResult');
-    flipCoinBtn.addEventListener('click', () => {
-        flipCoinBtn.classList.add('pulsing');
+    document.getElementById('flipCoinBtn').addEventListener('click', () => {
+        const btn = document.getElementById('flipCoinBtn');
+        const coinResult = document.getElementById('coinResult');
+        btn.classList.add('pulsing');
         coinResult.classList.remove('show');
         setTimeout(() => {
-            flipCoinBtn.classList.remove('pulsing');
+            btn.classList.remove('pulsing');
             const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
             coinResult.textContent = result;
             coinResult.classList.add('show');
@@ -228,4 +271,4 @@ Mediaedia!DOCTYPE html>
     });
 </script>
 </body>
-</html>
+    </html>
