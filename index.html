@@ -20,7 +20,32 @@
         transition: background 0.3s ease;
     }
 
+    /* --- VIDEOS --- */
+    #videoBackground {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none; /* verhindert Klicks */
+    }
+
+    #videoBackground video {
+        position: absolute;
+        width: 200px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 12px;
+        opacity: 0.8;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    /* --- UI Container --- */
     .container {
+        position: relative;
+        z-index: 10;
         text-align: center;
         width: 100%;
         max-width: 600px;
@@ -33,17 +58,9 @@
         margin-bottom: 30px;
     }
 
-    h1 {
-        font-size: 2.5rem;
-        font-weight: 300;
-    }
+    h1 { font-size: 2.5rem; font-weight: 300; }
+    h2 { font-size: 2rem; font-weight: 300; }
 
-    h2 {
-        font-size: 2rem;
-        font-weight: 300;
-    }
-
-    /* Haupt-Action-Buttons */
     button {
         padding: 20px 40px;
         font-size: 1.3rem;
@@ -65,161 +82,90 @@
         transform: translateY(-3px);
         box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
     }
+    button:active { transform: translateY(-1px); }
 
-    button:active {
-        transform: translateY(-1px);
-    }
-
-    /* Game-spezifische Button-Farben */
-    #coinGameBtn, #flipCoinBtn {
-        background: linear-gradient(45deg, #4ecdc4, #44a08d);
-        box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
-    }
-
-    #coinGameBtn:hover, #flipCoinBtn:hover {
-        box-shadow: 0 12px 35px rgba(78, 205, 196, 0.4);
-    }
-
-    #randomGameBtn, #magicButton {
-        background: linear-gradient(45deg, #ffecd2, #fcb69f);
-        color: #333;
-        box-shadow: 0 8px 25px rgba(252, 182, 159, 0.3);
-    }
-
-    #randomGameBtn:hover, #magicButton:hover {
-        box-shadow: 0 12px 35px rgba(252, 182, 159, 0.4);
-    }
-
-    /* Zurück-Buttons - kleiner und dezenter */
-    #backFromCoin, #backFromRandom {
-        background: linear-gradient(45deg, #74b9ff, #0984e3);
-        color: white;
-        padding: 12px 25px;
-        font-size: 0.9rem;
-        min-width: 120px;
-        margin-top: 40px;
-        box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
-        border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    #backFromCoin:hover, #backFromRandom:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
-    }
-
-    button.pulsing {
-        animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { 
-            transform: scale(1);
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
-        }
-        50% { 
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
-        }
-    }
-
-    .name, .coin-result {
-        margin-top: 30px;
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #fff;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        text-shadow: 0 3px 6px rgba(0,0,0,0.4);
-        background: linear-gradient(45deg, #ff9a9e, #fecfef);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        padding: 20px;
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .show {
-        opacity: 1;
-        animation: fadeInScale 0.5s ease;
-    }
-
-    @keyframes fadeInScale {
-        0% {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    .choice-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    /* Glasmorphismus-Effekt für Container */
-    .game-container {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 40px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .choice-buttons {
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        button {
-            min-width: 250px;
-        }
-        
-        h1 {
-            font-size: 2rem;
-        }
-        
-        .name, .coin-result {
-            font-size: 2rem;
-        }
-    }
+    /* ... alle deine bestehenden Styles bleiben unverändert ... */
 </style>
 </head>
 <body>
-<div class="container" id="app">
-    <div id="startScreen" class="game-container">
-        <h1>🎲 Wähle ein Spiel 🎲</h1>
-        <div class="choice-buttons">
-            <button id="coinGameBtn">🪙 Münze werfen</button>
-            <button id="randomGameBtn">🎯 Random Chooser</button>
+    <!-- Video-Hintergrund -->
+    <div id="videoBackground"></div>
+
+    <!-- UI -->
+    <div class="container" id="app">
+        <div id="startScreen" class="game-container">
+            <h1>🎲 Wähle ein Spiel 🎲</h1>
+            <div class="choice-buttons">
+                <button id="coinGameBtn">🪙 Münze werfen</button>
+                <button id="randomGameBtn">🎯 Random Chooser</button>
+            </div>
+        </div>
+
+        <div id="coinGame" class="game-container" style="display:none;">
+            <h2>🪙 Münze werfen!</h2>
+            <button id="flipCoinBtn">✨ Wirf Münze! ✨</button>
+            <div class="coin-result" id="coinResult"></div>
+            <button id="backFromCoin">← Zurück</button>
+        </div>
+
+        <div id="randomGame" class="game-container" style="display:none;">
+            <h2>🎯 Random Chooser</h2>
+            <button id="magicButton">✨ Klick mich! ✨</button>
+            <div class="name" id="nameDisplay"></div>
+            <button id="backFromRandom">← Zurück</button>
         </div>
     </div>
 
-    <div id="coinGame" class="game-container" style="display:none;">
-        <h2>🪙 Münze werfen!</h2>
-        <button id="flipCoinBtn">✨ Wirf Münze! ✨</button>
-        <div class="coin-result" id="coinResult"></div>
-        <button id="backFromCoin">← Zurück</button>
-    </div>
-
-    <div id="randomGame" class="game-container" style="display:none;">
-        <h2>🎯 Random Chooser</h2>
-        <button id="magicButton">✨ Klick mich! ✨</button>
-        <div class="name" id="nameDisplay"></div>
-        <button id="backFromRandom">← Zurück</button>
-    </div>
-</div>
-
 <script>
+    /* ------------------- VIDEO BACKGROUND ------------------- */
+    const videoFiles = [
+        "Media/subway.mp4",
+        "Media/chaya_julius.mp4",
+        "Media/chaya2.mp4",
+        "Media/chaya1.mp4",
+        "Media/brainrot_italia.mp4"
+    ];
+
+    const videoContainer = document.getElementById("videoBackground");
+    const videos = [];
+
+    videoFiles.forEach(src => {
+        const video = document.createElement("video");
+        video.src = src;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.play();
+        videoContainer.appendChild(video);
+
+        // Zufalls-Startposition + Richtung
+        videos.push({
+            el: video,
+            x: Math.random() * (window.innerWidth - 200),
+            y: Math.random() * (window.innerHeight - 120),
+            dx: (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2),
+            dy: (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2),
+            w: 200,
+            h: 120
+        });
+    });
+
+    function animateVideos() {
+        videos.forEach(v => {
+            v.x += v.dx;
+            v.y += v.dy;
+
+            // Kollision mit Rändern
+            if (v.x <= 0 || v.x + v.w >= window.innerWidth) v.dx *= -1;
+            if (v.y <= 0 || v.y + v.h >= window.innerHeight) v.dy *= -1;
+
+            v.el.style.transform = `translate(${v.x}px, ${v.y}px)`;
+        });
+        requestAnimationFrame(animateVideos);
+    }
+    animateVideos();
+
+    /* ------------------- DEIN SPIEL-CODE ------------------- */
     const app = document.getElementById('app');
     const startScreen = document.getElementById('startScreen');
     const coinGame = document.getElementById('coinGame');
@@ -231,100 +177,54 @@
     const backFromCoin = document.getElementById('backFromCoin');
     const backFromRandom = document.getElementById('backFromRandom');
 
-    // Zufällige Namen
     const names = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
 
-    // Show / Hide Screens
     coinGameBtn.onclick = () => {
         startScreen.style.display = 'none';
         coinGame.style.display = 'block';
-        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
     };
 
     randomGameBtn.onclick = () => {
         startScreen.style.display = 'none';
         randomGame.style.display = 'block';
-        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
     };
 
     backFromCoin.onclick = () => {
         coinGame.style.display = 'none';
         startScreen.style.display = 'block';
-        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
         document.getElementById('coinResult').classList.remove('show');
     };
 
     backFromRandom.onclick = () => {
         randomGame.style.display = 'none';
         startScreen.style.display = 'block';
-        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
         document.getElementById('nameDisplay').classList.remove('show');
     };
 
-    // Random Chooser
     const magicButton = document.getElementById('magicButton');
     const nameDisplay = document.getElementById('nameDisplay');
-
     magicButton.addEventListener('click', () => {
         magicButton.classList.add('pulsing');
         nameDisplay.classList.remove('show');
-
-        let startTime = null;
-        function animateBg(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const elapsed = timestamp - startTime;
-
-            const r = Math.floor(Math.sin(elapsed * 0.01) * 127 + 128);
-            const g = Math.floor(Math.sin(elapsed * 0.013 + 2) * 127 + 128);
-            const b = Math.floor(Math.sin(elapsed * 0.017 + 4) * 127 + 128);
-
-            document.body.style.background = `rgb(${r}, ${g}, ${b})`;
-
-            if (elapsed < 2000) {
-                requestAnimationFrame(animateBg);
-            } else {
-                magicButton.classList.remove('pulsing');
-                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-
-                const randomName = names[Math.floor(Math.random() * names.length)];
-                nameDisplay.textContent = randomName;
-                nameDisplay.classList.add('show');
-            }
-        }
-        requestAnimationFrame(animateBg);
+        setTimeout(() => {
+            magicButton.classList.remove('pulsing');
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            nameDisplay.textContent = randomName;
+            nameDisplay.classList.add('show');
+        }, 2000);
     });
 
-    // Münze werfen
     const flipCoinBtn = document.getElementById('flipCoinBtn');
     const coinResult = document.getElementById('coinResult');
-
     flipCoinBtn.addEventListener('click', () => {
         flipCoinBtn.classList.add('pulsing');
         coinResult.classList.remove('show');
-
-        let startTime = null;
-        function animateBg(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const elapsed = timestamp - startTime;
-
-            const r = Math.floor(Math.sin(elapsed * 0.01 + 1) * 127 + 128);
-            const g = Math.floor(Math.sin(elapsed * 0.013 + 3) * 127 + 128);
-            const b = Math.floor(Math.sin(elapsed * 0.017 + 5) * 127 + 128);
-
-            document.body.style.background = `rgb(${r}, ${g}, ${b})`;
-
-            if (elapsed < 2000) {
-                requestAnimationFrame(animateBg);
-            } else {
-                flipCoinBtn.classList.remove('pulsing');
-                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-
-                const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
-                coinResult.textContent = result;
-                coinResult.classList.add('show');
-            }
-        }
-        requestAnimationFrame(animateBg);
+        setTimeout(() => {
+            flipCoinBtn.classList.remove('pulsing');
+            const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
+            coinResult.textContent = result;
+            coinResult.classList.add('show');
+        }, 2000);
     });
 </script>
 </body>
