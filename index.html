@@ -3,31 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Random Name Button</title>
+<title>Random Chooser & Münze</title>
 <style>
     html, body {
         height: 100%;
         margin: 0;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    body {
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: #000;
-        font-family: Arial, sans-serif;
         transition: background-color 0.2s linear;
     }
 
     .container {
         text-align: center;
+        width: 100%;
     }
 
     button {
         padding: 20px 50px;
-        font-size: 2rem;
+        font-size: 1.8rem;
         border: none;
         border-radius: 50%;
         cursor: pointer;
-        transition: transform 0.2s ease;
-        background-color: #fff;
+        margin: 10px;
+        transition: transform 0.2s ease, background-color 0.2s ease;
     }
 
     button.pulsing {
@@ -39,7 +44,7 @@
         50% { transform: scale(1.2); }
     }
 
-    .name {
+    .name, .coin-result {
         margin-top: 20px;
         font-size: 2rem;
         color: #fff;
@@ -47,34 +52,97 @@
         transition: opacity 0.5s ease;
     }
 
-    .name.show {
+    .show {
         opacity: 1;
+    }
+
+    .choice-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
     }
 </style>
 </head>
 <body>
-<div class="container">
-    <button id="magicButton">Klick mich!</button>
-    <div class="name" id="nameDisplay"></div>
+<div class="container" id="app">
+    <div id="startScreen">
+        <h1 style="color:#fff;">Wähle ein Spiel:</h1>
+        <div class="choice-buttons">
+            <button id="coinGameBtn">Münze werfen</button>
+            <button id="randomGameBtn">Random Chooser</button>
+        </div>
+    </div>
+
+    <div id="coinGame" style="display:none;">
+        <h2 style="color:#fff;">Münze werfen!</h2>
+        <button id="flipCoinBtn">Wirf Münze!</button>
+        <div class="coin-result" id="coinResult"></div>
+        <button id="backFromCoin" style="margin-top:30px;">Zurück</button>
+    </div>
+
+    <div id="randomGame" style="display:none;">
+        <h2 style="color:#fff;">Random Chooser</h2>
+        <button id="magicButton">Klick mich!</button>
+        <div class="name" id="nameDisplay"></div>
+        <button id="backFromRandom" style="margin-top:30px;">Zurück</button>
+    </div>
 </div>
 
 <script>
-    const button = document.getElementById('magicButton');
-    const nameDisplay = document.getElementById('nameDisplay');
+    const app = document.getElementById('app');
+    const startScreen = document.getElementById('startScreen');
+    const coinGame = document.getElementById('coinGame');
+    const randomGame = document.getElementById('randomGame');
+
+    const coinGameBtn = document.getElementById('coinGameBtn');
+    const randomGameBtn = document.getElementById('randomGameBtn');
+
+    const backFromCoin = document.getElementById('backFromCoin');
+    const backFromRandom = document.getElementById('backFromRandom');
+
+    // Zufällige Namen
     const names = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
 
-    button.addEventListener('click', () => {
-        // Start pulsieren
-        button.classList.add('pulsing');
+    // Show / Hide Screens
+    coinGameBtn.onclick = () => {
+        startScreen.style.display = 'none';
+        coinGame.style.display = 'block';
+        document.body.style.backgroundColor = '#000';
+    };
+
+    randomGameBtn.onclick = () => {
+        startScreen.style.display = 'none';
+        randomGame.style.display = 'block';
+        document.body.style.backgroundColor = '#000';
+    };
+
+    backFromCoin.onclick = () => {
+        coinGame.style.display = 'none';
+        startScreen.style.display = 'block';
+        document.body.style.backgroundColor = '#000';
+        document.getElementById('coinResult').classList.remove('show');
+    };
+
+    backFromRandom.onclick = () => {
+        randomGame.style.display = 'none';
+        startScreen.style.display = 'block';
+        document.body.style.backgroundColor = '#000';
+        document.getElementById('nameDisplay').classList.remove('show');
+    };
+
+    // Random Chooser
+    const magicButton = document.getElementById('magicButton');
+    const nameDisplay = document.getElementById('nameDisplay');
+
+    magicButton.addEventListener('click', () => {
+        magicButton.classList.add('pulsing');
         nameDisplay.classList.remove('show');
 
         let startTime = null;
-
         function animateBg(timestamp) {
             if (!startTime) startTime = timestamp;
             const elapsed = timestamp - startTime;
 
-            // Berechne RGB Werte für fließende Farben
             const r = Math.floor(Math.sin(elapsed * 0.01) * 127 + 128);
             const g = Math.floor(Math.sin(elapsed * 0.013 + 2) * 127 + 128);
             const b = Math.floor(Math.sin(elapsed * 0.017 + 4) * 127 + 128);
@@ -84,17 +152,47 @@
             if (elapsed < 2000) {
                 requestAnimationFrame(animateBg);
             } else {
-                // Stop pulsieren
-                button.classList.remove('pulsing');
+                magicButton.classList.remove('pulsing');
                 document.body.style.backgroundColor = '#000';
 
-                // Zufälligen Namen anzeigen
                 const randomName = names[Math.floor(Math.random() * names.length)];
                 nameDisplay.textContent = randomName;
                 nameDisplay.classList.add('show');
             }
         }
+        requestAnimationFrame(animateBg);
+    });
 
+    // Münze werfen
+    const flipCoinBtn = document.getElementById('flipCoinBtn');
+    const coinResult = document.getElementById('coinResult');
+
+    flipCoinBtn.addEventListener('click', () => {
+        flipCoinBtn.classList.add('pulsing');
+        coinResult.classList.remove('show');
+
+        let startTime = null;
+        function animateBg(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+
+            const r = Math.floor(Math.sin(elapsed * 0.01 + 1) * 127 + 128);
+            const g = Math.floor(Math.sin(elapsed * 0.013 + 3) * 127 + 128);
+            const b = Math.floor(Math.sin(elapsed * 0.017 + 5) * 127 + 128);
+
+            document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+
+            if (elapsed < 2000) {
+                requestAnimationFrame(animateBg);
+            } else {
+                flipCoinBtn.classList.remove('pulsing');
+                document.body.style.backgroundColor = '#000';
+
+                const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
+                coinResult.textContent = result;
+                coinResult.classList.add('show');
+            }
+        }
         requestAnimationFrame(animateBg);
     });
 </script>
