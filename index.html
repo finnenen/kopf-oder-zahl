@@ -131,11 +131,88 @@
         100% { text-shadow: 0 0 10px #fff, 0 0 20px #ff0080; }
     }
 
+    /* --- Name Management --- */
+    .name-management {
+        margin-top: 30px;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(6px);
+    }
+
+    .name-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+
+    .name-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 20px;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .name-tag .remove-btn {
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.7);
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 0 2px;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        line-height: 1;
+        border-radius: 50%;
+        transition: color 0.2s;
+    }
+
+    .name-tag .remove-btn:hover {
+        color: #ff6b6b;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .name-add-row {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .name-add-row input {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 20px;
+        font-size: 1rem;
+        outline: none;
+        width: 160px;
+        background: rgba(255,255,255,0.25);
+        color: #fff;
+    }
+
+    .name-add-row input::placeholder { color: rgba(255,255,255,0.6); }
+
+    .name-add-row button {
+        padding: 8px 18px;
+        font-size: 1rem;
+        min-width: auto;
+        margin: 0;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         button { min-width: 250px; }
         h1 { font-size: 2rem; }
         .name, .coin-result { font-size: 2.2rem; }
+        .name-add-row button { min-width: auto; }
     }
 </style>
 </head>
@@ -164,6 +241,13 @@
             <h2>🎯 Random Chooser</h2>
             <button id="magicButton">✨ Klick mich! ✨</button>
             <div class="name" id="nameDisplay"></div>
+            <div class="name-management">
+                <div class="name-tags" id="nameTags"></div>
+                <div class="name-add-row">
+                    <input type="text" id="nameInput" placeholder="Neuer Name…">
+                    <button id="addNameBtn">+ Hinzufügen</button>
+                </div>
+            </div>
             <button id="backFromRandom">← Zurück</button>
         </div>
     </div>
@@ -253,9 +337,45 @@
 
     const names = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
 
+    function renderNameTags() {
+        const container = document.getElementById('nameTags');
+        container.innerHTML = '';
+        names.forEach((name, index) => {
+            const tag = document.createElement('span');
+            tag.className = 'name-tag';
+            tag.textContent = name;
+            const btn = document.createElement('button');
+            btn.className = 'remove-btn';
+            btn.textContent = '✕';
+            btn.addEventListener('click', () => {
+                names.splice(index, 1);
+                renderNameTags();
+            });
+            tag.appendChild(btn);
+            container.appendChild(tag);
+        });
+    }
+
+    document.getElementById('addNameBtn').addEventListener('click', () => {
+        const input = document.getElementById('nameInput');
+        const val = input.value.trim();
+        if (val) {
+            names.push(val);
+            input.value = '';
+            renderNameTags();
+        }
+    });
+
+    document.getElementById('nameInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('addNameBtn').click();
+    });
+
+    renderNameTags();
+
     document.getElementById('magicButton').addEventListener('click', () => {
         const btn = document.getElementById('magicButton');
         const nameDisplay = document.getElementById('nameDisplay');
+        if (names.length === 0) return;
         btn.classList.add('pulsing');
         nameDisplay.classList.remove('show');
         setTimeout(() => {
