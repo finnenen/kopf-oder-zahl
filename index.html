@@ -570,13 +570,15 @@
         nameDisplay.classList.remove('show');
         setTimeout(() => {
             btn.classList.remove('pulsing');
-            // Build weighted pool
-            const pool = [];
-            names.forEach(name => {
-                const w = getWeight(name);
-                for (let i = 0; i < w; i++) pool.push(name);
-            });
-            const randomName = pool[Math.floor(Math.random() * pool.length)];
+            // Weighted random selection
+            let totalWeight = 0;
+            names.forEach(name => { totalWeight += getWeight(name); });
+            let rand = Math.random() * totalWeight;
+            let randomName = names[0];
+            for (const name of names) {
+                rand -= getWeight(name);
+                if (rand <= 0) { randomName = name; break; }
+            }
             nameDisplay.textContent = randomName;
             nameDisplay.classList.add('show');
         }, 2000);
@@ -615,21 +617,23 @@
 
     // Long-press detection on "Münze werfen" button (start screen)
     let longPressTimer = null;
+    let longPressFired = false;
     const coinGameBtn = document.getElementById('coinGameBtn');
 
     function startLongPress(e) {
+        longPressFired = false;
         longPressTimer = setTimeout(() => {
-            longPressTimer = 'fired';
+            longPressFired = true;
+            longPressTimer = null;
             openHackerConsole();
         }, 3000);
     }
 
     function endLongPress(e) {
-        if (longPressTimer === 'fired') {
-            // Long press was triggered, prevent normal click
+        if (longPressFired) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            longPressTimer = null;
+            longPressFired = false;
             return;
         }
         clearTimeout(longPressTimer);
@@ -637,17 +641,17 @@
     }
 
     coinGameBtn.addEventListener('mousedown', startLongPress);
-    coinGameBtn.addEventListener('touchstart', startLongPress, { passive: true });
+    coinGameBtn.addEventListener('touchstart', startLongPress);
     coinGameBtn.addEventListener('mouseup', endLongPress);
     coinGameBtn.addEventListener('mouseleave', () => {
-        if (longPressTimer && longPressTimer !== 'fired') {
+        if (longPressTimer) {
             clearTimeout(longPressTimer);
             longPressTimer = null;
         }
     });
     coinGameBtn.addEventListener('touchend', endLongPress);
     coinGameBtn.addEventListener('touchcancel', () => {
-        if (longPressTimer && longPressTimer !== 'fired') {
+        if (longPressTimer) {
             clearTimeout(longPressTimer);
             longPressTimer = null;
         }
@@ -655,10 +659,10 @@
 
     // Prevent default click when long press fired
     coinGameBtn.addEventListener('click', (e) => {
-        if (longPressTimer === 'fired') {
+        if (longPressFired) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            longPressTimer = null;
+            longPressFired = false;
         }
     }, true);
 
@@ -700,6 +704,9 @@
                 const val = parseInt(slider.value, 10);
                 nameWeights[name] = val;
                 weightLabel.textContent = val + 'x';
+            });
+
+            slider.addEventListener('change', () => {
                 saveWeights();
             });
 
