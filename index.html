@@ -612,7 +612,7 @@
     }
 
     function getWeight(name) {
-        return nameWeights[name] || 1;
+        return name in nameWeights ? nameWeights[name] : 1;
     }
 
     // Long-press detection on "Münze werfen" button (start screen)
@@ -692,7 +692,7 @@
             const slider = document.createElement('input');
             slider.type = 'range';
             slider.className = 'hacker-person-slider';
-            slider.min = 1;
+            slider.min = 0;
             slider.max = 10;
             slider.value = getWeight(name);
 
