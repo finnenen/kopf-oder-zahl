@@ -335,7 +335,17 @@
         document.getElementById('nameDisplay').classList.remove('show');
     };
 
-    const names = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
+    const defaultNames = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
+    let names;
+    try {
+        names = JSON.parse(localStorage.getItem('names')) || defaultNames.slice();
+    } catch (e) {
+        names = defaultNames.slice();
+    }
+
+    function saveNames() {
+        localStorage.setItem('names', JSON.stringify(names));
+    }
 
     function renderNameTags() {
         const container = document.getElementById('nameTags');
@@ -349,6 +359,7 @@
             btn.textContent = '✕';
             btn.addEventListener('click', () => {
                 names.splice(index, 1);
+                saveNames();
                 renderNameTags();
             });
             tag.appendChild(btn);
@@ -362,6 +373,7 @@
         if (val) {
             names.push(val);
             input.value = '';
+            saveNames();
             renderNameTags();
         }
     });
