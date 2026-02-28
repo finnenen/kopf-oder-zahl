@@ -214,6 +214,174 @@
         .name, .coin-result { font-size: 2.2rem; }
         .name-add-row button { min-width: auto; }
     }
+
+    /* ---- HACKER CONSOLE ---- */
+    #hackerConsole {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 9999;
+        background: #0a0a0a;
+        color: #00ff41;
+        font-family: 'Courier New', Courier, monospace;
+        overflow-y: auto;
+        animation: hackerFadeIn 0.4s ease;
+    }
+
+    @keyframes hackerFadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    /* scanline overlay */
+    #hackerConsole::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(0, 255, 65, 0.03) 0px,
+            rgba(0, 255, 65, 0.03) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+        z-index: 10000;
+    }
+
+    /* flicker animation on the whole console */
+    #hackerConsole {
+        animation: hackerFadeIn 0.4s ease, hackerFlicker 4s infinite;
+    }
+
+    @keyframes hackerFlicker {
+        0%   { opacity: 1; }
+        3%   { opacity: 0.85; }
+        5%   { opacity: 1; }
+        50%  { opacity: 1; }
+        52%  { opacity: 0.9; }
+        53%  { opacity: 1; }
+        80%  { opacity: 1; }
+        82%  { opacity: 0.88; }
+        84%  { opacity: 1; }
+        100% { opacity: 1; }
+    }
+
+    .hacker-inner {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+        position: relative;
+    }
+
+    .hacker-close {
+        position: absolute;
+        top: 15px; right: 15px;
+        background: none;
+        border: 1px solid #00ff41;
+        color: #00ff41;
+        font-size: 1.6rem;
+        width: 40px; height: 40px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: 0 0 8px rgba(0,255,65,0.3);
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .hacker-close:hover {
+        background: rgba(0,255,65,0.15);
+        box-shadow: 0 0 16px rgba(0,255,65,0.5);
+        transform: none;
+    }
+
+    .hacker-title {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 40px #00ff41;
+        animation: hackerGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes hackerGlow {
+        0%   { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41; }
+        50%  { text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41, 0 0 60px #00ff41; }
+        100% { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41; }
+    }
+
+    .hacker-subtitle {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #00cc33;
+        margin-bottom: 30px;
+        opacity: 0.7;
+    }
+
+    .hacker-person {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        background: rgba(0,255,65,0.05);
+        border: 1px solid rgba(0,255,65,0.15);
+        border-radius: 4px;
+        gap: 12px;
+    }
+
+    .hacker-person-name {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        min-width: 90px;
+    }
+
+    .hacker-person-slider {
+        flex: 1;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 6px;
+        background: rgba(0,255,65,0.2);
+        border-radius: 3px;
+        outline: none;
+    }
+
+    .hacker-person-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: #00ff41;
+        cursor: pointer;
+        box-shadow: 0 0 6px #00ff41;
+    }
+
+    .hacker-person-slider::-moz-range-thumb {
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: #00ff41;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 0 6px #00ff41;
+    }
+
+    .hacker-person-weight {
+        font-size: 1rem;
+        min-width: 40px;
+        text-align: right;
+        color: #00ff41;
+        font-weight: bold;
+    }
 </style>
 </head>
 <body>
@@ -249,6 +417,16 @@
                 </div>
             </div>
             <button id="backFromRandom">← Zurück</button>
+        </div>
+    </div>
+
+    <!-- Hacker Console -->
+    <div id="hackerConsole">
+        <div class="hacker-inner">
+            <button class="hacker-close" id="hackerCloseBtn">✕</button>
+            <div class="hacker-title">Hacker-Konsole</div>
+            <div class="hacker-subtitle">// Wahrscheinlichkeiten manipulieren</div>
+            <div id="hackerPersonList"></div>
         </div>
     </div>
 
@@ -392,7 +570,13 @@
         nameDisplay.classList.remove('show');
         setTimeout(() => {
             btn.classList.remove('pulsing');
-            const randomName = names[Math.floor(Math.random() * names.length)];
+            // Build weighted pool
+            const pool = [];
+            names.forEach(name => {
+                const w = getWeight(name);
+                for (let i = 0; i < w; i++) pool.push(name);
+            });
+            const randomName = pool[Math.floor(Math.random() * pool.length)];
             nameDisplay.textContent = randomName;
             nameDisplay.classList.add('show');
         }, 2000);
@@ -410,6 +594,122 @@
             coinResult.classList.add('show');
         }, 2000);
     });
+
+    /* ------------------- HACKER CONSOLE ------------------- */
+
+    // Weight storage
+    let nameWeights;
+    try {
+        nameWeights = JSON.parse(localStorage.getItem('nameWeights')) || {};
+    } catch (e) {
+        nameWeights = {};
+    }
+
+    function saveWeights() {
+        localStorage.setItem('nameWeights', JSON.stringify(nameWeights));
+    }
+
+    function getWeight(name) {
+        return nameWeights[name] || 1;
+    }
+
+    // Long-press detection on "Münze werfen" button (start screen)
+    let longPressTimer = null;
+    const coinGameBtn = document.getElementById('coinGameBtn');
+
+    function startLongPress(e) {
+        longPressTimer = setTimeout(() => {
+            longPressTimer = 'fired';
+            openHackerConsole();
+        }, 3000);
+    }
+
+    function endLongPress(e) {
+        if (longPressTimer === 'fired') {
+            // Long press was triggered, prevent normal click
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            longPressTimer = null;
+            return;
+        }
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+    }
+
+    coinGameBtn.addEventListener('mousedown', startLongPress);
+    coinGameBtn.addEventListener('touchstart', startLongPress, { passive: true });
+    coinGameBtn.addEventListener('mouseup', endLongPress);
+    coinGameBtn.addEventListener('mouseleave', () => {
+        if (longPressTimer && longPressTimer !== 'fired') {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+    });
+    coinGameBtn.addEventListener('touchend', endLongPress);
+    coinGameBtn.addEventListener('touchcancel', () => {
+        if (longPressTimer && longPressTimer !== 'fired') {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+    });
+
+    // Prevent default click when long press fired
+    coinGameBtn.addEventListener('click', (e) => {
+        if (longPressTimer === 'fired') {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            longPressTimer = null;
+        }
+    }, true);
+
+    // Hacker Console open/close
+    function openHackerConsole() {
+        document.getElementById('hackerConsole').style.display = 'block';
+        renderHackerPersonList();
+    }
+
+    function closeHackerConsole() {
+        document.getElementById('hackerConsole').style.display = 'none';
+    }
+
+    document.getElementById('hackerCloseBtn').addEventListener('click', closeHackerConsole);
+
+    function renderHackerPersonList() {
+        const container = document.getElementById('hackerPersonList');
+        container.innerHTML = '';
+        names.forEach(name => {
+            const row = document.createElement('div');
+            row.className = 'hacker-person';
+
+            const nameEl = document.createElement('span');
+            nameEl.className = 'hacker-person-name';
+            nameEl.textContent = '> ' + name;
+
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.className = 'hacker-person-slider';
+            slider.min = 1;
+            slider.max = 10;
+            slider.value = getWeight(name);
+
+            const weightLabel = document.createElement('span');
+            weightLabel.className = 'hacker-person-weight';
+            weightLabel.textContent = getWeight(name) + 'x';
+
+            slider.addEventListener('input', () => {
+                const val = parseInt(slider.value, 10);
+                nameWeights[name] = val;
+                weightLabel.textContent = val + 'x';
+                saveWeights();
+            });
+
+            row.appendChild(nameEl);
+            row.appendChild(slider);
+            row.appendChild(weightLabel);
+            container.appendChild(row);
+        });
+    }
+
 </script>
 </body>
 </html>
