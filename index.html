@@ -505,6 +505,145 @@
         animation: wweSwapIn 0.6s ease;
         margin-bottom: 20px;
     }
+
+    /* --- Imposter Game --- */
+    .imposter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .imposter-close {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        font-size: 1.4rem;
+        width: 40px; height: 40px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        transition: background 0.2s;
+    }
+
+    .imposter-close:hover {
+        background: rgba(255,255,255,0.3);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .imposter-count-section {
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(6px);
+    }
+
+    .imposter-count-label {
+        color: #fff;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+    .imposter-count-row {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .imposter-count-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        font-weight: 700;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        background: rgba(255,255,255,0.15);
+        color: #fff;
+        border: 2px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .imposter-count-btn.active {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        border-color: #fff;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .imposter-count-btn:hover {
+        transform: none;
+        background: rgba(255,255,255,0.25);
+    }
+
+    .imposter-count-btn.active:hover {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    }
+
+    .imposter-player-section {
+        margin: 20px 0;
+    }
+
+    .imposter-player-name {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #fff;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        margin: 30px 0;
+        animation: fadeInScale 0.5s ease;
+    }
+
+    .imposter-role-box {
+        margin: 25px 0;
+        padding: 25px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(6px);
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .imposter-role-text {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .imposter-role-text.imposter {
+        color: #ff6b6b;
+        text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+
+    .imposter-result-name {
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeInScale 0.5s ease, glow 2s linear infinite, gradientShift 5s ease infinite;
+        margin: 20px 0 5px;
+    }
+
+    .imposter-result-msg {
+        color: rgba(255,255,255,0.8);
+        font-size: 1.3rem;
+        margin-bottom: 30px;
+    }
 </style>
 </head>
 <body>
@@ -546,6 +685,7 @@
         <div id="minigamesScreen" class="game-container" style="display:none;">
             <h2>🎮 Minigames</h2>
             <button id="wweGameBtn">🤔 Wer würde eher</button>
+            <button id="imposterGameBtn">🕵️ Imposter</button>
             <button id="backFromMinigames">← Zurück</button>
         </div>
 
@@ -565,6 +705,46 @@
             <button id="wweRevealBtn">🔍 Frage aufdecken</button>
             <div class="wwe-counter" id="wweCounter"></div>
             <button id="backFromWwe">← Zurück zum Hauptmenü</button>
+        </div>
+
+        <!-- Imposter Setup -->
+        <div id="imposterSetup" class="game-container" style="display:none;">
+            <div class="imposter-header">
+                <h2 style="margin-bottom:0;">🕵️ Imposter</h2>
+                <button class="imposter-close" id="imposterSetupCloseBtn">✕</button>
+            </div>
+            <div class="imposter-count-section">
+                <div class="imposter-count-label">Anzahl Imposter:</div>
+                <div class="imposter-count-row" id="imposterCountRow"></div>
+            </div>
+            <div class="name-management">
+                <div class="name-tags" id="imposterNameTags"></div>
+                <div class="name-add-row">
+                    <input type="text" id="imposterNameInput" placeholder="Neuer Name…">
+                    <button id="imposterAddNameBtn">+ Hinzufügen</button>
+                </div>
+            </div>
+            <button id="imposterStartBtn">🎮 Spiel starten</button>
+        </div>
+
+        <!-- Imposter Game (Role Reveal) -->
+        <div id="imposterGame" class="game-container" style="display:none;">
+            <div class="imposter-header">
+                <h2 style="margin-bottom:0;">🕵️ Imposter</h2>
+                <button class="imposter-close" id="imposterGameCloseBtn">✕</button>
+            </div>
+            <div id="imposterRoleReveal">
+                <div class="imposter-player-name" id="imposterCurrentPlayer"></div>
+                <button id="imposterRevealBtn">🔍 Rolle aufdecken</button>
+                <div class="imposter-role-box" id="imposterRoleBox" style="display:none;">
+                    <span class="imposter-role-text" id="imposterRoleText"></span>
+                </div>
+                <button id="imposterNextBtn" style="display:none;">Weiter →</button>
+            </div>
+            <div id="imposterResult" style="display:none;">
+                <div class="imposter-result-name" id="imposterStarterName"></div>
+                <div class="imposter-result-msg">fängt an</div>
+            </div>
         </div>
     </div>
 
@@ -864,6 +1044,180 @@
             if (callback) callback();
         }, 2500);
     }
+
+    /* ------------------- IMPOSTER GAME ------------------- */
+    let imposterWords = [];
+    let imposterCount = 1;
+    let imposterCurrentIndex = 0;
+    let imposterRoles = []; // { name, isImposter }
+    let imposterWord = '';
+
+    // Load words from JSON
+    fetch('woerter_imposter.json')
+        .then(res => res.json())
+        .then(data => { imposterWords = data.woerter || []; })
+        .catch(() => { imposterWords = []; });
+
+    const imposterSetup = document.getElementById('imposterSetup');
+    const imposterGame = document.getElementById('imposterGame');
+
+    // Navigation
+    document.getElementById('imposterGameBtn').onclick = () => {
+        minigamesScreen.style.display = 'none';
+        imposterSetup.style.display = 'block';
+        renderImposterCountButtons();
+        renderImposterNameTags();
+    };
+
+    document.getElementById('imposterSetupCloseBtn').onclick = () => {
+        imposterSetup.style.display = 'none';
+        minigamesScreen.style.display = 'block';
+    };
+
+    document.getElementById('imposterGameCloseBtn').onclick = () => {
+        imposterGame.style.display = 'none';
+        minigamesScreen.style.display = 'block';
+    };
+
+    // Imposter count buttons (1-5)
+    function renderImposterCountButtons() {
+        const row = document.getElementById('imposterCountRow');
+        row.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'imposter-count-btn' + (i === imposterCount ? ' active' : '');
+            btn.textContent = i;
+            btn.addEventListener('click', () => {
+                imposterCount = i;
+                renderImposterCountButtons();
+            });
+            row.appendChild(btn);
+        }
+    }
+
+    // Player list for Imposter setup (shared with global names)
+    function renderImposterNameTags() {
+        const container = document.getElementById('imposterNameTags');
+        container.innerHTML = '';
+        names.forEach((name, index) => {
+            const tag = document.createElement('span');
+            tag.className = 'name-tag';
+            tag.textContent = name;
+            const btn = document.createElement('button');
+            btn.className = 'remove-btn';
+            btn.textContent = '✕';
+            btn.addEventListener('click', () => {
+                names.splice(index, 1);
+                saveNames();
+                renderNameTags();
+                renderImposterNameTags();
+            });
+            tag.appendChild(btn);
+            container.appendChild(tag);
+        });
+    }
+
+    document.getElementById('imposterAddNameBtn').addEventListener('click', () => {
+        const input = document.getElementById('imposterNameInput');
+        const val = input.value.trim();
+        if (val) {
+            names.push(val);
+            input.value = '';
+            saveNames();
+            renderNameTags();
+            renderImposterNameTags();
+        }
+    });
+
+    document.getElementById('imposterNameInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('imposterAddNameBtn').click();
+    });
+
+    // Fisher-Yates shuffle
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // Start game
+    document.getElementById('imposterStartBtn').addEventListener('click', () => {
+        if (names.length < 2) {
+            alert('Mindestens 2 Spieler werden benötigt!');
+            return;
+        }
+        if (imposterCount >= names.length) {
+            alert('Es müssen mehr Spieler als Imposter vorhanden sein!');
+            return;
+        }
+        if (imposterWords.length === 0) {
+            alert('Keine Wörter geladen!');
+            return;
+        }
+
+        // Pick random word
+        imposterWord = imposterWords[Math.floor(Math.random() * imposterWords.length)];
+
+        // Assign roles randomly using Fisher-Yates shuffle
+        const shuffled = shuffleArray(names.slice());
+        imposterRoles = shuffled.map((name, i) => ({
+            name: name,
+            isImposter: i < imposterCount
+        }));
+        // Shuffle again to randomize display order
+        shuffleArray(imposterRoles);
+
+        imposterCurrentIndex = 0;
+
+        imposterSetup.style.display = 'none';
+        imposterGame.style.display = 'block';
+        showImposterPlayer();
+    });
+
+    function showImposterPlayer() {
+        document.getElementById('imposterRoleReveal').style.display = 'block';
+        document.getElementById('imposterResult').style.display = 'none';
+
+        const player = imposterRoles[imposterCurrentIndex];
+        document.getElementById('imposterCurrentPlayer').textContent = player.name;
+        document.getElementById('imposterRevealBtn').style.display = 'inline-block';
+        document.getElementById('imposterRoleBox').style.display = 'none';
+        document.getElementById('imposterNextBtn').style.display = 'none';
+    }
+
+    document.getElementById('imposterRevealBtn').addEventListener('click', () => {
+        const player = imposterRoles[imposterCurrentIndex];
+        const roleText = document.getElementById('imposterRoleText');
+
+        if (player.isImposter) {
+            roleText.textContent = 'Du bist der Imposter';
+            roleText.className = 'imposter-role-text imposter';
+        } else {
+            roleText.textContent = imposterWord;
+            roleText.className = 'imposter-role-text';
+        }
+
+        document.getElementById('imposterRevealBtn').style.display = 'none';
+        document.getElementById('imposterRoleBox').style.display = 'flex';
+        document.getElementById('imposterNextBtn').style.display = 'inline-block';
+    });
+
+    document.getElementById('imposterNextBtn').addEventListener('click', () => {
+        imposterCurrentIndex++;
+        if (imposterCurrentIndex < imposterRoles.length) {
+            showImposterPlayer();
+        } else {
+            // All players done - show who starts
+            const starterIndex = Math.floor(Math.random() * imposterRoles.length);
+            const starter = imposterRoles[starterIndex].name;
+
+            document.getElementById('imposterRoleReveal').style.display = 'none';
+            document.getElementById('imposterResult').style.display = 'block';
+            document.getElementById('imposterStarterName').textContent = starter;
+        }
+    });
 
     /* ------------------- HACKER CONSOLE ------------------- */
 
