@@ -644,6 +644,181 @@
         font-size: 1.3rem;
         margin-bottom: 30px;
     }
+
+    /* --- Imposter Auflösung --- */
+    .imposter-auflosung-btn {
+        padding: 16px 36px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        margin: 20px auto;
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .imposter-auflosung-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+    }
+
+    .imposter-auflosung-list {
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(6px);
+    }
+
+    .imposter-auflosung-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        margin: 6px 0;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .imposter-auflosung-item.is-imposter {
+        background: rgba(255, 107, 107, 0.25);
+        border: 1px solid rgba(255, 107, 107, 0.5);
+    }
+
+    .imposter-auflosung-item .player-name {
+        flex: 1;
+    }
+
+    .imposter-auflosung-item .player-role {
+        font-weight: 700;
+        margin-left: 12px;
+    }
+
+    .imposter-auflosung-item.is-imposter .player-role {
+        color: #ff6b6b;
+        text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+    }
+
+    .imposter-auflosung-word {
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 15px 0 10px;
+        text-align: center;
+    }
+
+    .imposter-auflosung-word span {
+        background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 5s ease infinite;
+    }
+
+    /* --- Groups Feature --- */
+    .groups-section {
+        margin-bottom: 12px;
+    }
+
+    .groups-list {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding: 8px 4px;
+        justify-content: flex-start;
+    }
+
+    .group-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px 14px;
+        background: rgba(255,255,255,0.12);
+        border-radius: 14px;
+        min-width: 70px;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        position: relative;
+    }
+
+    .group-item:hover {
+        background: rgba(255,255,255,0.22);
+        transform: translateY(-2px);
+    }
+
+    .group-item .group-icon {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+    }
+
+    .group-item .group-name {
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-align: center;
+        word-break: break-word;
+        max-width: 80px;
+    }
+
+    .group-item .group-delete {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: rgba(255, 107, 107, 0.9);
+        border: none;
+        color: #fff;
+        font-size: 0.7rem;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .group-item:hover .group-delete {
+        opacity: 1;
+    }
+
+    .group-item .group-delete:hover {
+        background: #ff4444;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .group-create-btn {
+        padding: 8px 18px;
+        font-size: 1rem;
+        min-width: auto;
+        margin: 8px 0 0;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .group-create-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
 </style>
 </head>
 <body>
@@ -673,11 +848,13 @@
             <button id="magicButton">✨ Klick mich! ✨</button>
             <div class="name" id="nameDisplay"></div>
             <div class="name-management">
+                <div class="groups-section" id="randomGroupsSection"></div>
                 <div class="name-tags" id="nameTags"></div>
                 <div class="name-add-row">
                     <input type="text" id="nameInput" placeholder="Neuer Name…">
                     <button id="addNameBtn">+ Hinzufügen</button>
                 </div>
+                <button class="group-create-btn" id="randomCreateGroupBtn">👥 Gruppe erstellen</button>
             </div>
             <button id="backFromRandom">← Zurück</button>
         </div>
@@ -710,7 +887,7 @@
         <!-- Imposter Setup -->
         <div id="imposterSetup" class="game-container" style="display:none;">
             <div class="imposter-header">
-                <h2 style="margin-bottom:0;">🕵️ Imposter</h2>
+                <div></div>
                 <button class="imposter-close" id="imposterSetupCloseBtn">✕</button>
             </div>
             <div class="imposter-count-section">
@@ -718,19 +895,21 @@
                 <div class="imposter-count-row" id="imposterCountRow"></div>
             </div>
             <div class="name-management">
+                <div class="groups-section" id="imposterGroupsSection"></div>
                 <div class="name-tags" id="imposterNameTags"></div>
                 <div class="name-add-row">
                     <input type="text" id="imposterNameInput" placeholder="Neuer Name…">
                     <button id="imposterAddNameBtn">+ Hinzufügen</button>
                 </div>
+                <button class="group-create-btn" id="imposterCreateGroupBtn">👥 Gruppe erstellen</button>
             </div>
             <button id="imposterStartBtn">🎮 Spiel starten</button>
         </div>
 
         <!-- Imposter Game (Role Reveal) -->
         <div id="imposterGame" class="game-container" style="display:none;">
-            <div class="imposter-header">
-                <h2 style="margin-bottom:0;">🕵️ Imposter</h2>
+            <div class="imposter-header" id="imposterGameHeader">
+                <div></div>
                 <button class="imposter-close" id="imposterGameCloseBtn">✕</button>
             </div>
             <div id="imposterRoleReveal">
@@ -744,6 +923,13 @@
             <div id="imposterResult" style="display:none;">
                 <div class="imposter-result-name" id="imposterStarterName"></div>
                 <div class="imposter-result-msg">fängt an</div>
+                <button class="imposter-auflosung-btn" id="imposterAuflosungBtn">🔎 Auflösung</button>
+            </div>
+            <div id="imposterAuflosung" style="display:none;">
+                <h2 style="color:#fff; margin-bottom: 15px;">🔎 Auflösung</h2>
+                <div class="imposter-auflosung-word" id="imposterAuflosungWord"></div>
+                <div class="imposter-auflosung-list" id="imposterAuflosungList"></div>
+                <button id="imposterAuflosungCloseBtn">Schließen</button>
             </div>
         </div>
     </div>
@@ -829,6 +1015,7 @@
     document.getElementById('randomGameBtn').onclick = () => {
         startScreen.style.display = 'none';
         randomGame.style.display = 'block';
+        renderGroups();
     };
 
     document.getElementById('minigamesBtn').onclick = () => {
@@ -1067,6 +1254,7 @@
         imposterSetup.style.display = 'block';
         renderImposterCountButtons();
         renderImposterNameTags();
+        renderGroups();
     };
 
     document.getElementById('imposterSetupCloseBtn').onclick = () => {
@@ -1076,7 +1264,9 @@
 
     document.getElementById('imposterGameCloseBtn').onclick = () => {
         imposterGame.style.display = 'none';
-        minigamesScreen.style.display = 'block';
+        imposterSetup.style.display = 'block';
+        renderImposterNameTags();
+        renderGroups();
     };
 
     // Imposter count buttons (1-5)
@@ -1173,6 +1363,8 @@
 
         imposterSetup.style.display = 'none';
         imposterGame.style.display = 'block';
+        document.getElementById('imposterGameHeader').style.display = 'flex';
+        document.getElementById('imposterAuflosung').style.display = 'none';
         showImposterPlayer();
     });
 
@@ -1215,9 +1407,152 @@
 
             document.getElementById('imposterRoleReveal').style.display = 'none';
             document.getElementById('imposterResult').style.display = 'block';
+            document.getElementById('imposterAuflosung').style.display = 'none';
             document.getElementById('imposterStarterName').textContent = starter;
+            // Hide close button at end, user must use Auflösung
+            document.getElementById('imposterGameHeader').style.display = 'none';
         }
     });
+
+    // Auflösung button
+    document.getElementById('imposterAuflosungBtn').addEventListener('click', () => {
+        document.getElementById('imposterResult').style.display = 'none';
+        document.getElementById('imposterAuflosung').style.display = 'block';
+
+        // Show the word
+        document.getElementById('imposterAuflosungWord').innerHTML = 'Das Wort war: <span>' + imposterWord + '</span>';
+
+        // Build player list
+        const list = document.getElementById('imposterAuflosungList');
+        list.innerHTML = '';
+        imposterRoles.forEach(player => {
+            const item = document.createElement('div');
+            item.className = 'imposter-auflosung-item' + (player.isImposter ? ' is-imposter' : '');
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'player-name';
+            nameSpan.textContent = player.name;
+
+            const roleSpan = document.createElement('span');
+            roleSpan.className = 'player-role';
+            roleSpan.textContent = player.isImposter ? '🕵️ Imposter' : '✅ Kein Imposter';
+
+            item.appendChild(nameSpan);
+            item.appendChild(roleSpan);
+            list.appendChild(item);
+        });
+    });
+
+    // Auflösung close button -> back to imposter setup
+    document.getElementById('imposterAuflosungCloseBtn').addEventListener('click', () => {
+        imposterGame.style.display = 'none';
+        imposterSetup.style.display = 'block';
+        document.getElementById('imposterGameHeader').style.display = 'flex';
+        document.getElementById('imposterAuflosung').style.display = 'none';
+        document.getElementById('imposterResult').style.display = 'none';
+        renderImposterNameTags();
+        renderGroups();
+    });
+
+    /* ------------------- GROUPS FEATURE ------------------- */
+    let savedGroups;
+    try {
+        savedGroups = JSON.parse(localStorage.getItem('savedGroups')) || [];
+    } catch (e) {
+        savedGroups = [];
+    }
+
+    function saveGroups() {
+        localStorage.setItem('savedGroups', JSON.stringify(savedGroups));
+    }
+
+    function createGroup() {
+        if (names.length === 0) {
+            alert('Füge zuerst Spieler hinzu!');
+            return;
+        }
+        const groupName = prompt('Gruppenname eingeben:');
+        if (groupName && groupName.trim()) {
+            savedGroups.push({
+                name: groupName.trim(),
+                players: names.slice()
+            });
+            saveGroups();
+            renderGroups();
+        }
+    }
+
+    function loadGroup(index) {
+        const group = savedGroups[index];
+        if (group) {
+            names = group.players.slice();
+            saveNames();
+            renderNameTags();
+            renderImposterNameTags();
+            renderGroups();
+        }
+    }
+
+    function deleteGroup(index) {
+        savedGroups.splice(index, 1);
+        saveGroups();
+        renderGroups();
+    }
+
+    function renderGroups() {
+        const containers = [
+            document.getElementById('randomGroupsSection'),
+            document.getElementById('imposterGroupsSection')
+        ];
+
+        containers.forEach(container => {
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (savedGroups.length === 0) return;
+
+            const list = document.createElement('div');
+            list.className = 'groups-list';
+
+            savedGroups.forEach((group, index) => {
+                const item = document.createElement('div');
+                item.className = 'group-item';
+                item.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('group-delete')) return;
+                    loadGroup(index);
+                });
+
+                const icon = document.createElement('div');
+                icon.className = 'group-icon';
+                icon.textContent = '👥';
+
+                const name = document.createElement('div');
+                name.className = 'group-name';
+                name.textContent = group.name;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'group-delete';
+                deleteBtn.textContent = '✕';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteGroup(index);
+                });
+
+                item.appendChild(deleteBtn);
+                item.appendChild(icon);
+                item.appendChild(name);
+                list.appendChild(item);
+            });
+
+            container.appendChild(list);
+        });
+    }
+
+    document.getElementById('randomCreateGroupBtn').addEventListener('click', createGroup);
+    document.getElementById('imposterCreateGroupBtn').addEventListener('click', createGroup);
+
+    // Initial render of groups
+    renderGroups();
 
     /* ------------------- HACKER CONSOLE ------------------- */
 
