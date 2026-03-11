@@ -722,6 +722,118 @@
         animation: gradientShift 5s ease infinite;
     }
 
+    /* --- Würdest du eher --- */
+    #wdeGame {
+        padding: 0 !important;
+        max-width: 100vw !important;
+        width: 100vw !important;
+        height: 100vh;
+        position: fixed;
+        top: 0; left: 0;
+        z-index: 100;
+        border-radius: 0 !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wde-close {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 110;
+        background: rgba(0,0,0,0.35);
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        width: 44px; height: 44px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        transition: background 0.2s;
+    }
+
+    .wde-close:hover {
+        background: rgba(0,0,0,0.55);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .wde-split {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .wde-half {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 32px 24px;
+        transition: filter 0.2s;
+        user-select: none;
+        position: relative;
+    }
+
+    .wde-half:active {
+        filter: brightness(0.85);
+    }
+
+    .wde-top {
+        background: #2563eb;
+    }
+
+    .wde-bottom {
+        background: #dc2626;
+    }
+
+    .wde-option-text {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+        max-width: 85%;
+        line-height: 1.4;
+    }
+
+    .wde-percent {
+        color: rgba(255,255,255,0.95);
+        font-size: 3rem;
+        font-weight: 800;
+        margin-top: 16px;
+        display: none;
+    }
+
+    .wde-percent.show {
+        display: block;
+    }
+
+    .wde-divider {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        background: #fff;
+        color: #1a1a2e;
+        font-size: 1.4rem;
+        font-weight: 900;
+        padding: 10px 28px;
+        border-radius: 30px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        letter-spacing: 2px;
+    }
+
     /* --- Groups Feature --- */
     .groups-section {
         margin-bottom: 12px;
@@ -863,6 +975,7 @@
             <h2>🎮 Minigames</h2>
             <button id="wweGameBtn">🤔 Wer würde eher</button>
             <button id="imposterGameBtn">🕵️ Imposter</button>
+            <button id="wdeGameBtn">⚖️ Würdest du eher</button>
             <button id="backFromMinigames">← Zurück</button>
         </div>
 
@@ -932,6 +1045,21 @@
                 <div class="imposter-auflosung-word" id="imposterAuflosungWord"></div>
                 <div class="imposter-auflosung-list" id="imposterAuflosungList"></div>
                 <button id="imposterAuflosungCloseBtn">Schließen</button>
+            </div>
+        </div>
+
+        <div id="wdeGame" class="game-container" style="display:none;">
+            <button class="wde-close" id="wdeCloseBtn">✕</button>
+            <div class="wde-split" id="wdeSplit">
+                <div class="wde-half wde-top" id="wdeTop">
+                    <span class="wde-option-text" id="wdeOptionA"></span>
+                    <span class="wde-percent" id="wdePercentA"></span>
+                </div>
+                <div class="wde-divider">ODER</div>
+                <div class="wde-half wde-bottom" id="wdeBottom">
+                    <span class="wde-option-text" id="wdeOptionB"></span>
+                    <span class="wde-percent" id="wdePercentB"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -1008,6 +1136,7 @@
     const randomGame = document.getElementById('randomGame');
     const minigamesScreen = document.getElementById('minigamesScreen');
     const wweGame = document.getElementById('wweGame');
+    const wdeGame = document.getElementById('wdeGame');
 
     document.getElementById('coinGameBtn').onclick = () => {
         startScreen.style.display = 'none';
@@ -1058,6 +1187,18 @@
         wweGame.style.display = 'none';
         startScreen.style.display = 'block';
         resetWwe();
+    };
+
+    document.getElementById('wdeGameBtn').onclick = () => {
+        minigamesScreen.style.display = 'none';
+        wdeGame.style.display = 'block';
+        startWde();
+    };
+
+    document.getElementById('wdeCloseBtn').onclick = () => {
+        wdeGame.style.display = 'none';
+        minigamesScreen.style.display = 'block';
+        stopWde();
     };
 
     const defaultNames = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
@@ -1455,6 +1596,71 @@
         renderImposterNameTags();
         renderGroups();
     });
+
+    /* ------------------- WÜRDEST DU EHER ------------------- */
+    let wdeQuestions = [];
+    let wdeUsedQuestions = [];
+    let wdeTimer = null;
+    let wdeClickable = true;
+
+    fetch('wuerdestdueher.json')
+        .then(res => res.json())
+        .then(data => { wdeQuestions = data.questions || []; })
+        .catch(() => { wdeQuestions = []; });
+
+    function pickWdeQuestion() {
+        if (wdeQuestions.length === 0) return null;
+        if (wdeUsedQuestions.length >= wdeQuestions.length) {
+            wdeUsedQuestions = [];
+        }
+        const available = wdeQuestions.filter(q => !wdeUsedQuestions.includes(q.id));
+        const q = available[Math.floor(Math.random() * available.length)];
+        wdeUsedQuestions.push(q.id);
+        return q;
+    }
+
+    function showWdeQuestion() {
+        const q = pickWdeQuestion();
+        if (!q) return;
+        document.getElementById('wdeOptionA').textContent = q.option_a;
+        document.getElementById('wdeOptionB').textContent = q.option_b;
+        const pA = document.getElementById('wdePercentA');
+        const pB = document.getElementById('wdePercentB');
+        pA.classList.remove('show');
+        pB.classList.remove('show');
+        pA.textContent = '';
+        pB.textContent = '';
+        wdeClickable = true;
+    }
+
+    function handleWdeClick() {
+        if (!wdeClickable) return;
+        wdeClickable = false;
+        const pctA = Math.floor(Math.random() * 81) + 10;
+        const pctB = 100 - pctA;
+        const pA = document.getElementById('wdePercentA');
+        const pB = document.getElementById('wdePercentB');
+        pA.textContent = pctA + '%';
+        pB.textContent = pctB + '%';
+        pA.classList.add('show');
+        pB.classList.add('show');
+        wdeTimer = setTimeout(() => {
+            showWdeQuestion();
+        }, 1000);
+    }
+
+    function startWde() {
+        wdeUsedQuestions = [];
+        showWdeQuestion();
+        document.getElementById('wdeTop').addEventListener('click', handleWdeClick);
+        document.getElementById('wdeBottom').addEventListener('click', handleWdeClick);
+    }
+
+    function stopWde() {
+        if (wdeTimer) { clearTimeout(wdeTimer); wdeTimer = null; }
+        document.getElementById('wdeTop').removeEventListener('click', handleWdeClick);
+        document.getElementById('wdeBottom').removeEventListener('click', handleWdeClick);
+    }
 
     /* ------------------- GROUPS FEATURE ------------------- */
     let savedGroups;
