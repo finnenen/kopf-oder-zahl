@@ -595,6 +595,93 @@
         animation: apSlotSpin 0.15s ease-in-out;
     }
 
+    /* --- Drink Choser --- */
+    .dc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .dc-close {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        font-size: 1.4rem;
+        width: 40px; height: 40px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        transition: background 0.2s;
+    }
+
+    .dc-close:hover {
+        background: rgba(255,255,255,0.3);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .dc-bottle-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+    }
+
+    .dc-bottle {
+        font-size: 6rem;
+        opacity: 0;
+        animation: dcBottleAnim 2.2s ease forwards;
+    }
+
+    @keyframes dcBottleAnim {
+        0%   { opacity: 0; transform: scale(0.5) rotate(0deg); }
+        20%  { opacity: 1; transform: scale(1) rotate(0deg); }
+        30%  { transform: scale(1) rotate(-12deg); }
+        40%  { transform: scale(1) rotate(12deg); }
+        50%  { transform: scale(1) rotate(-10deg); }
+        60%  { transform: scale(1) rotate(10deg); }
+        70%  { transform: scale(1) rotate(-6deg); }
+        80%  { opacity: 1; transform: scale(1) rotate(0deg); }
+        100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    }
+
+    .dc-result-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .dc-result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 14px;
+        backdrop-filter: blur(6px);
+    }
+
+    .dc-result-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .dc-result-drink {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.85);
+        text-align: right;
+    }
+
     /* --- Imposter Game --- */
     .imposter-header {
         display: flex;
@@ -1033,6 +1120,8 @@
             <div class="choice-buttons">
                 <button id="coinGameBtn">🪙 Münze werfen</button>
                 <button id="randomGameBtn">🎯 Random Chooser</button>
+                <button id="drinkChoserBtn">🍹 Drink Choser</button>
+                <button id="abendplanungBtn">🍻 Abendplanung</button>
                 <button id="minigamesBtn">🎮 Minigames</button>
             </div>
         </div>
@@ -1065,7 +1154,6 @@
             <button id="wweGameBtn">🤔 Wer würde eher</button>
             <button id="imposterGameBtn">🕵️ Imposter</button>
             <button id="wdeGameBtn">⚖️ Würdest du eher</button>
-            <button id="abendplanungBtn">🍻 Abendplanung</button>
             <button id="backFromMinigames">← Zurück</button>
         </div>
 
@@ -1151,6 +1239,40 @@
                     <span class="wde-percent" id="wdePercentB"></span>
                 </div>
             </div>
+        </div>
+
+        <!-- Drink Choser Setup -->
+        <div id="drinkChoserSetup" class="game-container" style="display:none;">
+            <div class="dc-header">
+                <h2 style="margin-bottom:0;">🍹 Drink Choser</h2>
+                <button class="dc-close" id="dcSetupCloseBtn">✕</button>
+            </div>
+            <div class="name-management">
+                <div class="groups-section" id="dcGroupsSection"></div>
+                <div class="name-tags" id="dcNameTags"></div>
+                <div class="name-add-row">
+                    <input type="text" id="dcNameInput" placeholder="Neuer Name…">
+                    <button id="dcAddNameBtn">+ Hinzufügen</button>
+                </div>
+                <button class="group-create-btn" id="dcCreateGroupBtn">👥 Gruppe erstellen</button>
+            </div>
+            <button id="dcAssignBtn">🍺 Jetzt zuweisen</button>
+        </div>
+
+        <!-- Drink Choser Animation -->
+        <div id="drinkChoserAnimation" class="game-container" style="display:none;">
+            <div class="dc-bottle-container">
+                <div class="dc-bottle" id="dcBottle">🍺</div>
+            </div>
+        </div>
+
+        <!-- Drink Choser Result -->
+        <div id="drinkChoserResult" class="game-container" style="display:none;">
+            <div class="dc-header">
+                <h2 style="margin-bottom:0;">🍹 Drink Choser</h2>
+                <button class="dc-close" id="dcResultCloseBtn">✕</button>
+            </div>
+            <div class="dc-result-list" id="dcResultList"></div>
         </div>
 
         <div id="abendplanungGame" class="game-container" style="display:none;">
@@ -1329,7 +1451,7 @@
         });
 
     document.getElementById('abendplanungBtn').onclick = () => {
-        minigamesScreen.style.display = 'none';
+        startScreen.style.display = 'none';
         abendplanungGame.style.display = 'block';
         document.getElementById('apInitial').style.display = 'block';
         document.getElementById('apResult').style.display = 'none';
@@ -1338,7 +1460,7 @@
 
     document.getElementById('apCloseBtn').onclick = () => {
         abendplanungGame.style.display = 'none';
-        minigamesScreen.style.display = 'block';
+        startScreen.style.display = 'block';
     };
 
     function apRandomize() {
@@ -1377,6 +1499,121 @@
 
     document.getElementById('apRandomizeBtn').onclick = apRandomize;
     document.getElementById('apRerollBtn').onclick = apRandomize;
+
+    /* ------------------- DRINK CHOSER ------------------- */
+    let dcDrinks = [];
+
+    fetch('drinks.json')
+        .then(res => res.json())
+        .then(data => { dcDrinks = data.drinks || []; })
+        .catch(() => { dcDrinks = []; });
+
+    const drinkChoserSetup = document.getElementById('drinkChoserSetup');
+    const drinkChoserAnimation = document.getElementById('drinkChoserAnimation');
+    const drinkChoserResult = document.getElementById('drinkChoserResult');
+
+    document.getElementById('drinkChoserBtn').onclick = () => {
+        startScreen.style.display = 'none';
+        drinkChoserSetup.style.display = 'block';
+        renderDcNameTags();
+        renderGroups();
+    };
+
+    document.getElementById('dcSetupCloseBtn').onclick = () => {
+        drinkChoserSetup.style.display = 'none';
+        startScreen.style.display = 'block';
+    };
+
+    document.getElementById('dcResultCloseBtn').onclick = () => {
+        drinkChoserResult.style.display = 'none';
+        startScreen.style.display = 'block';
+    };
+
+    function renderDcNameTags() {
+        const container = document.getElementById('dcNameTags');
+        container.innerHTML = '';
+        names.forEach((name, index) => {
+            const tag = document.createElement('span');
+            tag.className = 'name-tag';
+            tag.textContent = name;
+            const btn = document.createElement('button');
+            btn.className = 'remove-btn';
+            btn.textContent = '✕';
+            btn.addEventListener('click', () => {
+                names.splice(index, 1);
+                saveNames();
+                renderNameTags();
+                renderImposterNameTags();
+                renderDcNameTags();
+            });
+            tag.appendChild(btn);
+            container.appendChild(tag);
+        });
+    }
+
+    document.getElementById('dcAddNameBtn').addEventListener('click', () => {
+        const input = document.getElementById('dcNameInput');
+        const val = input.value.trim();
+        if (val) {
+            names.push(val);
+            input.value = '';
+            saveNames();
+            renderNameTags();
+            renderImposterNameTags();
+            renderDcNameTags();
+        }
+    });
+
+    document.getElementById('dcNameInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('dcAddNameBtn').click();
+    });
+
+    document.getElementById('dcAssignBtn').addEventListener('click', () => {
+        if (names.length === 0) {
+            alert('Füge zuerst Spieler hinzu!');
+            return;
+        }
+        if (dcDrinks.length === 0) {
+            alert('Keine Getränke verfügbar!');
+            return;
+        }
+
+        drinkChoserSetup.style.display = 'none';
+        drinkChoserAnimation.style.display = 'block';
+
+        // Reset animation by re-inserting the bottle element
+        const bottle = document.getElementById('dcBottle');
+        bottle.style.animation = 'none';
+        void bottle.offsetWidth;
+        bottle.style.animation = '';
+
+        // After animation ends (~2.2s), show results
+        setTimeout(() => {
+            drinkChoserAnimation.style.display = 'none';
+            drinkChoserResult.style.display = 'block';
+
+            const resultList = document.getElementById('dcResultList');
+            resultList.innerHTML = '';
+
+            names.forEach(name => {
+                const drink = dcDrinks[Math.floor(Math.random() * dcDrinks.length)];
+                const item = document.createElement('div');
+                item.className = 'dc-result-item';
+
+                const nameEl = document.createElement('span');
+                nameEl.className = 'dc-result-name';
+                nameEl.textContent = name;
+
+                const drinkEl = document.createElement('span');
+                drinkEl.className = 'dc-result-drink';
+                drinkEl.textContent = '🍹 ' + drink;
+
+                item.appendChild(nameEl);
+                item.appendChild(drinkEl);
+                resultList.appendChild(item);
+            });
+        }, 2400);
+    });
 
     const defaultNames = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
     let names;
@@ -1876,6 +2113,7 @@
             saveNames();
             renderNameTags();
             renderImposterNameTags();
+            renderDcNameTags();
             renderGroups();
         }
     }
@@ -1889,7 +2127,8 @@
     function renderGroups() {
         const containers = [
             document.getElementById('randomGroupsSection'),
-            document.getElementById('imposterGroupsSection')
+            document.getElementById('imposterGroupsSection'),
+            document.getElementById('dcGroupsSection')
         ];
 
         containers.forEach(container => {
@@ -1937,6 +2176,7 @@
 
     document.getElementById('randomCreateGroupBtn').addEventListener('click', createGroup);
     document.getElementById('imposterCreateGroupBtn').addEventListener('click', createGroup);
+    document.getElementById('dcCreateGroupBtn').addEventListener('click', createGroup);
 
     // Initial render of groups
     renderGroups();
