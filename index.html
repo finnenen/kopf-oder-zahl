@@ -1358,7 +1358,7 @@
             slotMotto.textContent = apMottos[Math.floor(Math.random() * apMottos.length)];
             slotBar.classList.remove('ap-slot-spinning');
             slotMotto.classList.remove('ap-slot-spinning');
-            void slotBar.offsetWidth;
+            void slotBar.offsetWidth; // force reflow to restart animation
             slotBar.classList.add('ap-slot-spinning');
             slotMotto.classList.add('ap-slot-spinning');
             step++;
