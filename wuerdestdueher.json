@@ -1,0 +1,560 @@
+{
+  "game_title": "Würdest du eher - Minigame Data",
+  "questions": [
+    {
+      "id": 1,
+      "option_a": "stinkende Füße haben",
+      "option_b": "schlechten Atem haben"
+    },
+    {
+      "id": 2,
+      "option_a": "telepathisch kommunizieren",
+      "option_b": "jede einzelne Sprache auf der Welt kennen"
+    },
+    {
+      "id": 3,
+      "option_a": "einem Außerirdischen begegnen",
+      "option_b": "Big Foot begegnen"
+    },
+    {
+      "id": 4,
+      "option_a": "unkontrolliert in Gesang ausbrechen",
+      "option_b": "unerwartet deine Stimme verlieren"
+    },
+    {
+      "id": 5,
+      "option_a": "von jeder Oberfläche abprallen",
+      "option_b": "nie wieder springen können"
+    },
+    {
+      "id": 6,
+      "option_a": "ein Gespräch mit deinem vergangenen Ich führen",
+      "option_b": "ein Gespräch mit deinem zukünftigen Ich führen"
+    },
+    {
+      "id": 7,
+      "option_a": "ständig Kopfschmerzen haben",
+      "option_b": "ständig unter einem Juckreiz leiden"
+    },
+    {
+      "id": 8,
+      "option_a": "wissen, was deine Haustiere von dir denken",
+      "option_b": "wünschen, dass sie dich verstehen"
+    },
+    {
+      "id": 9,
+      "option_a": "nur noch schreien können",
+      "option_b": "nur noch flüstern können"
+    },
+    {
+      "id": 10,
+      "option_a": "Mitglied der Kardashian-Familie sein",
+      "option_b": "Mitglied der Obama-Familie sein"
+    },
+    {
+      "id": 11,
+      "option_a": "wie ein Fisch aussehen",
+      "option_b": "wie ein Fisch riechen"
+    },
+    {
+      "id": 12,
+      "option_a": "auf Youtube berühmt werden",
+      "option_b": "auf TikTok berühmt werden"
+    },
+    {
+      "id": 13,
+      "option_a": "dich hoffnungslos in einer alten Stadt verirren",
+      "option_b": "dich im Wald verirren"
+    },
+    {
+      "id": 14,
+      "option_a": "von einem Zombie gejagt werden",
+      "option_b": "von einem Löwen gejagt werden"
+    },
+    {
+      "id": 15,
+      "option_a": "nur sieben Finger haben",
+      "option_b": "nur sieben Zehen haben"
+    },
+    {
+      "id": 16,
+      "option_a": "Essen, das immer zu süß ist",
+      "option_b": "Essen, das nicht süß genug ist"
+    },
+    {
+      "id": 17,
+      "option_a": "deinen Körper gegen den deines Ex tauschen",
+      "option_b": "deinen Körper gegen den deiner Oma tauschen"
+    },
+    {
+      "id": 18,
+      "option_a": "für den Rest deines Lebens nur einen Film sehen",
+      "option_b": "für den Rest deines Lebens nur das gleiche Essen essen"
+    },
+    {
+      "id": 19,
+      "option_a": "eine Menge mittelmäßiger Freunde haben",
+      "option_b": "einen wirklich treuen Hund haben"
+    },
+    {
+      "id": 20,
+      "option_a": "eine Woche lang nur Burger essen",
+      "option_b": "eine Woche lang nur Eiscreme essen"
+    },
+    {
+      "id": 21,
+      "option_a": "die Superkräfte von Iron Man haben",
+      "option_b": "die Superkräfte von Batman haben"
+    },
+    {
+      "id": 22,
+      "option_a": "in einer Welt leben, in der es ständig schneit",
+      "option_b": "in einer Welt leben, in der es immer regnet"
+    },
+    {
+      "id": 23,
+      "option_a": "Feuer kontrollieren können",
+      "option_b": "Wasser kontrollieren können"
+    },
+    {
+      "id": 24,
+      "option_a": "in einer Welt ohne Musik leben",
+      "option_b": "in einer Welt ohne Filme leben"
+    },
+    {
+      "id": 25,
+      "option_a": "das Leben einer 'Friends'-Figur führen",
+      "option_b": "das Leben eines 'Game of Thrones'-Charakters führen"
+    },
+    {
+      "id": 26,
+      "option_a": "überall behaart sein",
+      "option_b": "nirgends behaart sein"
+    },
+    {
+      "id": 27,
+      "option_a": "kalte Pizza zum Frühstück essen",
+      "option_b": "heißen Joghurt zum Frühstück essen"
+    },
+    {
+      "id": 28,
+      "option_a": "eine Woche lang ohne Zähneputzen auskommen",
+      "option_b": "zwei Wochen lang ohne Duschen auskommen"
+    },
+    {
+      "id": 29,
+      "option_a": "ein fotografisches Gedächtnis haben",
+      "option_b": "ein perfektes Gehör haben"
+    },
+    {
+      "id": 30,
+      "option_a": "bei einer Dating-Show mitmachen",
+      "option_b": "bei einer Survival-Show mitmachen"
+    },
+    {
+      "id": 31,
+      "option_a": "deinen Lieblingssong in Dauerschleife hören",
+      "option_b": "nie wieder Musik hören"
+    },
+    {
+      "id": 32,
+      "option_a": "dich teleportieren können",
+      "option_b": "ein Privatflugzeug haben"
+    },
+    {
+      "id": 33,
+      "option_a": "immer schwitzen",
+      "option_b": "immer frieren"
+    },
+    {
+      "id": 34,
+      "option_a": "für etwas Schreckliches in die Geschichte eingehen",
+      "option_b": "nach deinem Tod in Vergessenheit geraten"
+    },
+    {
+      "id": 35,
+      "option_a": "ein berühmter Künstler sein",
+      "option_b": "ein berühmter Sportler sein"
+    },
+    {
+      "id": 36,
+      "option_a": "Verschwörungstheorie als wahr entlarven",
+      "option_b": "Verschwörungstheorie als falsch beweisen"
+    },
+    {
+      "id": 37,
+      "option_a": "einen neuen Planeten entdecken",
+      "option_b": "einen versunkenen Schatz finden"
+    },
+    {
+      "id": 38,
+      "option_a": "gelegentlich zaubern können",
+      "option_b": "für immer Kräfte eines Superhelden haben"
+    },
+    {
+      "id": 39,
+      "option_a": "auf einem Boot leben",
+      "option_b": "in einem Baumhaus leben"
+    },
+    {
+      "id": 40,
+      "option_a": "für immer superschräge Träume haben",
+      "option_b": "nie wieder träumen"
+    },
+    {
+      "id": 41,
+      "option_a": "Wünsche in die Realität umsetzen",
+      "option_b": "die Gedanken anderer Menschen lesen"
+    },
+    {
+      "id": 42,
+      "option_a": "ein Jahr jeden Tag die gleiche Farbe tragen",
+      "option_b": "für immer die gleiche Frisur tragen"
+    },
+    {
+      "id": 43,
+      "option_a": "mit Stöckelschuhen am Strand laufen",
+      "option_b": "mit Sandalen auf einem Schlamm-Festival laufen"
+    },
+    {
+      "id": 44,
+      "option_a": "Rest des Lebens nur drinnen verbringen",
+      "option_b": "Rest des Lebens nur draußen verbringen"
+    },
+    {
+      "id": 45,
+      "option_a": "für immer auf das Frühstück verzichten",
+      "option_b": "für immer auf das Abendessen verzichten"
+    },
+    {
+      "id": 46,
+      "option_a": "einen ganzen Tag im Sitzen verbringen",
+      "option_b": "einen ganzen Tag im Stehen verbringen"
+    },
+    {
+      "id": 47,
+      "option_a": "ein Leben mit 1000 Jahren führen",
+      "option_b": "zehn Leben mit jeweils 100 Jahren führen"
+    },
+    {
+      "id": 48,
+      "option_a": "das Internet aufgeben",
+      "option_b": "deine Krankenversicherung aufgeben"
+    },
+    {
+      "id": 49,
+      "option_a": "Film über deinen peinlichsten Moment drehen",
+      "option_b": "Kollegen deine Handy-Galerie zeigen"
+    },
+    {
+      "id": 50,
+      "option_a": "superschnell sein",
+      "option_b": "unmenschlich stark sein"
+    },
+    {
+      "id": 51,
+      "option_a": "attraktiver sein",
+      "option_b": "intelligenter sein"
+    },
+    {
+      "id": 52,
+      "option_a": "schicker Abend im Restaurant",
+      "option_b": "Filmabend zu Hause"
+    },
+    {
+      "id": 53,
+      "option_a": "Leben mit der gleichen Person verbringen",
+      "option_b": "Leben mit vielen verschiedenen Menschen verbringen"
+    },
+    {
+      "id": 54,
+      "option_a": "das perfekte Geschenk machen",
+      "option_b": "das perfekte Geschenk bekommen"
+    },
+    {
+      "id": 55,
+      "option_a": "alles im Kopf deines Partners wissen",
+      "option_b": "einen Tag in der Haut deines Partners verbringen"
+    },
+    {
+      "id": 56,
+      "option_a": "einmal das beste Date aller Zeiten haben",
+      "option_b": "viele überdurchschnittlich gute Dates haben"
+    },
+    {
+      "id": 57,
+      "option_a": "für immer nur noch texten können",
+      "option_b": "für immer nur noch anrufen können"
+    },
+    {
+      "id": 58,
+      "option_a": "einen Tag in der Unterwäsche deines Partners",
+      "option_b": "einen Tag in den Schuhen deines Partners"
+    },
+    {
+      "id": 59,
+      "option_a": "ständig überrascht werden",
+      "option_b": "immer wissen, was auf dich zukommt"
+    },
+    {
+      "id": 60,
+      "option_a": "deinen Geist für immer jung halten",
+      "option_b": "deinen Körper für immer jung halten"
+    },
+    {
+      "id": 61,
+      "option_a": "Zeit nur mit älteren Menschen verbringen",
+      "option_b": "Zeit nur mit jüngeren Menschen verbringen"
+    },
+    {
+      "id": 62,
+      "option_a": "als Säugetier wiedergeboren werden",
+      "option_b": "als Insekt wiedergeboren werden"
+    },
+    {
+      "id": 63,
+      "option_a": "eine Hochzeit planen",
+      "option_b": "eine riesige Geburtstagsparty planen"
+    },
+    {
+      "id": 64,
+      "option_a": "Lieblingsessen gekocht bekommen",
+      "option_b": "in ein neues Restaurant gehen"
+    },
+    {
+      "id": 65,
+      "option_a": "die lauteste Person im Raum sein",
+      "option_b": "die leiseste Person im Raum sein"
+    },
+    {
+      "id": 66,
+      "option_a": "immer zu spät kommen",
+      "option_b": "immer zu früh kommen"
+    },
+    {
+      "id": 67,
+      "option_a": "den schlimmsten Moment deines Lebens vergessen",
+      "option_b": "den schönsten Moment deines Lebens vergessen"
+    },
+    {
+      "id": 68,
+      "option_a": "für den Rest des Lebens 20 sein",
+      "option_b": "für den Rest des Lebens 40 sein"
+    },
+    {
+      "id": 69,
+      "option_a": "jeden Tag einen Kuss bekommen",
+      "option_b": "jeden Tag eine Umarmung bekommen"
+    },
+    {
+      "id": 70,
+      "option_a": "alles Geld der Welt haben",
+      "option_b": "alle Liebe der Welt haben"
+    },
+    {
+      "id": 71,
+      "option_a": "ein Jahr lang eine Fernbeziehung führen",
+      "option_b": "einen Monat gar nicht mit dem Partner reden"
+    },
+    {
+      "id": 72,
+      "option_a": "Person deiner Träume heiraten",
+      "option_b": "Karriere deiner Träume machen"
+    },
+    {
+      "id": 73,
+      "option_a": "wissen, wie du stirbst",
+      "option_b": "wissen, wann du stirbst"
+    },
+    {
+      "id": 74,
+      "option_a": "für immer in einer Großstadt leben",
+      "option_b": "für immer in einer Kleinstadt leben"
+    },
+    {
+      "id": 75,
+      "option_a": "ganz auf soziale Medien verzichten",
+      "option_b": "dein Geld als Influencer verdienen"
+    },
+    {
+      "id": 76,
+      "option_a": "eine Tiefsee-Reise machen",
+      "option_b": "eine Weltraum-Reise machen"
+    },
+    {
+      "id": 77,
+      "option_a": "alles Geld des letzten Jahres verlieren",
+      "option_b": "alle Erinnerungen des letzten Jahres verlieren"
+    },
+    {
+      "id": 78,
+      "option_a": "immer am selben Strand Urlaub machen",
+      "option_b": "jedes Jahr einen neuen Ort entdecken"
+    },
+    {
+      "id": 79,
+      "option_a": "umsonst reisen, wohin du willst",
+      "option_b": "dein Traumhaus umsonst bekommen"
+    },
+    {
+      "id": 80,
+      "option_a": "fliegen können",
+      "option_b": "unter Wasser atmen können"
+    },
+    {
+      "id": 81,
+      "option_a": "nachts im Meer mit Haien schwimmen",
+      "option_b": "Nacht in einem Geisterhaus verbringen"
+    },
+    {
+      "id": 82,
+      "option_a": "sechs Monate Frühling",
+      "option_b": "sechs Monate Winter"
+    },
+    {
+      "id": 83,
+      "option_a": "ein Jahr auf Desserts verzichten",
+      "option_b": "jeden Tag einen Löffel Wasabi essen"
+    },
+    {
+      "id": 84,
+      "option_a": "Abend mit Zendaya verbringen",
+      "option_b": "Abend mit Miley Cyrus verbringen"
+    },
+    {
+      "id": 85,
+      "option_a": "jede Nacht um 21:30 Uhr schlafen",
+      "option_b": "jede Nacht erst um 3:30 Uhr schlafen"
+    },
+    {
+      "id": 86,
+      "option_a": "Schwarm ungewaschen küssen",
+      "option_b": "Schwarm ein Jahr lang gar nicht küssen"
+    },
+    {
+      "id": 87,
+      "option_a": "als Hund zurückkehren",
+      "option_b": "als Katze zurückkehren"
+    },
+    {
+      "id": 88,
+      "option_a": "ein fotografisches Gedächtnis haben",
+      "option_b": "Gedanken lesen können"
+    },
+    {
+      "id": 89,
+      "option_a": "Frühstück zum Abendessen",
+      "option_b": "Abendessen zum Frühstück"
+    },
+    {
+      "id": 90,
+      "option_a": "für immer auf das Fahrrad verzichten",
+      "option_b": "nie wieder fliegen"
+    },
+    {
+      "id": 91,
+      "option_a": "Fitnessplan von 'The Rock' befolgen",
+      "option_b": "Tattoo von Pete Davidson stechen lassen"
+    },
+    {
+      "id": 92,
+      "option_a": "nur noch Horrorfilme gucken",
+      "option_b": "nur noch Liebes-Komödien gucken"
+    },
+    {
+      "id": 93,
+      "option_a": "alleine auf einer Insel leben",
+      "option_b": "Stadtwohnung mit sechs Mitbewohnern"
+    },
+    {
+      "id": 94,
+      "option_a": "gut singen und schlecht tanzen",
+      "option_b": "schlecht singen und gut tanzen"
+    },
+    {
+      "id": 95,
+      "option_a": "alles Gesagte zurücknehmen können",
+      "option_b": "jedes Gespräch über dich mithören"
+    },
+    {
+      "id": 96,
+      "option_a": "Statist in einem Oscar-Film",
+      "option_b": "Hauptdarsteller in einem Trash-Film"
+    },
+    {
+      "id": 97,
+      "option_a": "ein Jahr auf Kaffee verzichten",
+      "option_b": "ein Jahr auf Brot verzichten"
+    },
+    {
+      "id": 98,
+      "option_a": "immer ehrlich sein",
+      "option_b": "immer nett sein"
+    },
+    {
+      "id": 99,
+      "option_a": "15 Stunden am Tag schlafen",
+      "option_b": "nur zwei Stunden pro Nacht schlafen"
+    },
+    {
+      "id": 100,
+      "option_a": "nur noch denselben Song hören",
+      "option_b": "nur noch denselben Film sehen"
+    },
+    {
+      "id": 101,
+      "option_a": "eigener Pool im Garten",
+      "option_b": "direkt am Meer wohnen"
+    },
+    {
+      "id": 102,
+      "option_a": "Suchverlauf veröffentlichen",
+      "option_b": "alle Namen deiner Crushes verraten"
+    },
+    {
+      "id": 103,
+      "option_a": "150 erste Dates in einem Jahr",
+      "option_b": "ein Jahr mit dem nächsten Date verbringen"
+    },
+    {
+      "id": 104,
+      "option_a": "ein bester Freund (sonst niemand)",
+      "option_b": "große Gruppe von Bekannten (kein bester Freund)"
+    },
+    {
+      "id": 105,
+      "option_a": "mit Aalen schwimmen",
+      "option_b": "in einer Fledermaus-Höhle schlafen"
+    },
+    {
+      "id": 106,
+      "option_a": "Magenverstimmung beim Traum-Date",
+      "option_b": "Doppel-Date mit den Eltern"
+    },
+    {
+      "id": 107,
+      "option_a": "die klügste Person im Raum sein",
+      "option_b": "die lustigste Person im Raum sein"
+    },
+    {
+      "id": 108,
+      "option_a": "24 Stunden mit dem Ex eingesperrt sein",
+      "option_b": "Date mit politischem Gegenteil"
+    },
+    {
+      "id": 109,
+      "option_a": "morgen eine Million Euro bekommen",
+      "option_b": "in zehn Jahren zehn Millionen Euro"
+    },
+    {
+      "id": 110,
+      "option_a": "jedes Jahr in eine neue Stadt ziehen",
+      "option_b": "für immer in der jetzigen Stadt bleiben"
+    },
+    {
+      "id": 111,
+      "option_a": "mit Lieblingskünstler auf Tournee gehen",
+      "option_b": "mit Lieblingsschauspieler über roten Teppich"
+    }
+  ]
+}
