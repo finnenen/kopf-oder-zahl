@@ -1650,6 +1650,7 @@
     }
 
     function startWde() {
+        stopWde();
         wdeUsedQuestions = [];
         showWdeQuestion();
         document.getElementById('wdeTop').addEventListener('click', handleWdeClick);
