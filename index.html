@@ -506,6 +506,95 @@
         margin-bottom: 20px;
     }
 
+    /* --- Abendplanung --- */
+    .ap-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .ap-close {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        font-size: 1.4rem;
+        width: 40px; height: 40px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        transition: background 0.2s;
+    }
+
+    .ap-close:hover {
+        background: rgba(255,255,255,0.3);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .ap-result-box {
+        margin: 30px 0;
+        padding: 25px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(6px);
+    }
+
+    .ap-bar {
+        font-size: 2.8rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 5s ease infinite;
+        margin-bottom: 15px;
+    }
+
+    .ap-motto {
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.85);
+        line-height: 1.4;
+    }
+
+    .ap-slot {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+        margin: 10px 0;
+        min-height: 2.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ap-slot-motto {
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.7);
+    }
+
+    @keyframes apSlotSpin {
+        0% { opacity: 0; transform: translateY(-20px); }
+        20% { opacity: 1; transform: translateY(0); }
+        80% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(20px); }
+    }
+
+    .ap-slot-spinning {
+        animation: apSlotSpin 0.15s ease-in-out;
+    }
+
     /* --- Imposter Game --- */
     .imposter-header {
         display: flex;
@@ -976,6 +1065,7 @@
             <button id="wweGameBtn">🤔 Wer würde eher</button>
             <button id="imposterGameBtn">🕵️ Imposter</button>
             <button id="wdeGameBtn">⚖️ Würdest du eher</button>
+            <button id="abendplanungBtn">🍻 Abendplanung</button>
             <button id="backFromMinigames">← Zurück</button>
         </div>
 
@@ -1062,6 +1152,27 @@
                 </div>
             </div>
         </div>
+
+        <div id="abendplanungGame" class="game-container" style="display:none;">
+            <div class="ap-header">
+                <h2 style="margin-bottom:0;">🍻 Abendplanung</h2>
+                <button class="ap-close" id="apCloseBtn">✕</button>
+            </div>
+            <div id="apInitial">
+                <button id="apRandomizeBtn">🎲 Randomize</button>
+            </div>
+            <div id="apResult" style="display:none;">
+                <div class="ap-result-box">
+                    <div class="ap-bar" id="apBarName"></div>
+                    <div class="ap-motto" id="apMottoName"></div>
+                </div>
+                <button id="apRerollBtn">🎲 Neu würfeln</button>
+            </div>
+            <div id="apAnimation" style="display:none;">
+                <div class="ap-slot" id="apSlotBar"></div>
+                <div class="ap-slot ap-slot-motto" id="apSlotMotto"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Hacker Console -->
@@ -1137,6 +1248,7 @@
     const minigamesScreen = document.getElementById('minigamesScreen');
     const wweGame = document.getElementById('wweGame');
     const wdeGame = document.getElementById('wdeGame');
+    const abendplanungGame = document.getElementById('abendplanungGame');
 
     document.getElementById('coinGameBtn').onclick = () => {
         startScreen.style.display = 'none';
@@ -1200,6 +1312,71 @@
         minigamesScreen.style.display = 'block';
         stopWde();
     };
+
+    /* ------------------- ABENDPLANUNG ------------------- */
+    let apBars = [];
+    let apMottos = [];
+
+    fetch('abendplanung.json')
+        .then(res => res.json())
+        .then(data => {
+            apBars = data.bars || [];
+            apMottos = data.mottos || [];
+        })
+        .catch(() => {
+            apBars = [];
+            apMottos = [];
+        });
+
+    document.getElementById('abendplanungBtn').onclick = () => {
+        minigamesScreen.style.display = 'none';
+        abendplanungGame.style.display = 'block';
+        document.getElementById('apInitial').style.display = 'block';
+        document.getElementById('apResult').style.display = 'none';
+        document.getElementById('apAnimation').style.display = 'none';
+    };
+
+    document.getElementById('apCloseBtn').onclick = () => {
+        abendplanungGame.style.display = 'none';
+        minigamesScreen.style.display = 'block';
+    };
+
+    function apRandomize() {
+        if (apBars.length === 0 || apMottos.length === 0) return;
+
+        document.getElementById('apInitial').style.display = 'none';
+        document.getElementById('apResult').style.display = 'none';
+        document.getElementById('apAnimation').style.display = 'block';
+
+        const slotBar = document.getElementById('apSlotBar');
+        const slotMotto = document.getElementById('apSlotMotto');
+        const totalSteps = 15;
+        let step = 0;
+
+        const interval = setInterval(() => {
+            slotBar.textContent = apBars[Math.floor(Math.random() * apBars.length)];
+            slotMotto.textContent = apMottos[Math.floor(Math.random() * apMottos.length)];
+            slotBar.classList.remove('ap-slot-spinning');
+            slotMotto.classList.remove('ap-slot-spinning');
+            void slotBar.offsetWidth; // force reflow to restart animation
+            slotBar.classList.add('ap-slot-spinning');
+            slotMotto.classList.add('ap-slot-spinning');
+            step++;
+
+            if (step >= totalSteps) {
+                clearInterval(interval);
+                const finalBar = apBars[Math.floor(Math.random() * apBars.length)];
+                const finalMotto = apMottos[Math.floor(Math.random() * apMottos.length)];
+                document.getElementById('apBarName').textContent = finalBar;
+                document.getElementById('apMottoName').textContent = finalMotto;
+                document.getElementById('apAnimation').style.display = 'none';
+                document.getElementById('apResult').style.display = 'block';
+            }
+        }, 120);
+    }
+
+    document.getElementById('apRandomizeBtn').onclick = apRandomize;
+    document.getElementById('apRerollBtn').onclick = apRandomize;
 
     const defaultNames = ["Finn", "Vincent", "Julius", "Henri", "Tilman"];
     let names;
