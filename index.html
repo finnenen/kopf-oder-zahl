@@ -1696,27 +1696,27 @@
         fetch(getJsonPath('abendplanung.json'))
             .then(res => res.json())
             .then(data => { apBars = data.bars || []; apMottos = data.mottos || []; })
-            .catch(() => { apBars = []; apMottos = []; });
+            .catch(e => { console.error('Failed to load abendplanung.json:', e); apBars = []; apMottos = []; });
 
         fetch(getJsonPath('drinks.json'))
             .then(res => res.json())
             .then(data => { dcDrinks = data.drinks || []; })
-            .catch(() => { dcDrinks = []; });
+            .catch(e => { console.error('Failed to load drinks.json:', e); dcDrinks = []; });
 
         fetch(getJsonPath('fragen_wer_wuerde.json'))
             .then(res => res.json())
             .then(data => { wweQuestions = data.questions || []; })
-            .catch(() => { wweQuestions = []; });
+            .catch(e => { console.error('Failed to load fragen_wer_wuerde.json:', e); wweQuestions = []; });
 
         fetch(getJsonPath('woerter_imposter.json'))
             .then(res => res.json())
             .then(data => { imposterWords = data.woerter || []; })
-            .catch(() => { imposterWords = []; });
+            .catch(e => { console.error('Failed to load woerter_imposter.json:', e); imposterWords = []; });
 
         fetch(getJsonPath('wuerdestdueher.json'))
             .then(res => res.json())
             .then(data => { wdeQuestions = data.questions || []; })
-            .catch(() => { wdeQuestions = []; });
+            .catch(e => { console.error('Failed to load wuerdestdueher.json:', e); wdeQuestions = []; });
     }
 
     function applyUiTranslations() {
