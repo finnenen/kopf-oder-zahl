@@ -1010,6 +1010,87 @@
         letter-spacing: 2px;
     }
 
+    /* --- Language Selector --- */
+    .lang-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        font-size: 1.6rem;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+        transition: background 0.2s;
+        z-index: 20;
+    }
+
+    .lang-btn:hover {
+        background: rgba(255,255,255,0.3);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .lang-dropdown {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        background: rgba(30, 20, 60, 0.95);
+        border-radius: 14px;
+        padding: 8px;
+        z-index: 30;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        min-width: 140px;
+    }
+
+    .lang-dropdown.open {
+        display: block;
+    }
+
+    .lang-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: background 0.15s;
+        border: none;
+        background: none;
+        width: 100%;
+        min-width: auto;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .lang-option:hover {
+        background: rgba(255,255,255,0.15);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .lang-option.active {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .lang-option .lang-flag {
+        font-size: 1.4rem;
+    }
+
     /* --- Groups Feature --- */
     .groups-section {
         margin-bottom: 12px;
@@ -1115,8 +1196,16 @@
 
     <!-- UI -->
     <div class="container" id="app">
-        <div id="startScreen" class="game-container">
-            <h1>🎲 Wähle ein Spiel 🎲</h1>
+        <div id="startScreen" class="game-container" style="position:relative;">
+            <button class="lang-btn" id="langBtn">🌐</button>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-option" data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
+                <button class="lang-option" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+                <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+                <button class="lang-option" data-lang="ar"><span class="lang-flag">🇸🇦</span> العربية</button>
+                <button class="lang-option" data-lang="zh"><span class="lang-flag">🇨🇳</span> 中文</button>
+            </div>
+            <h1 id="startTitle">🎲 Wähle ein Spiel 🎲</h1>
             <div class="choice-buttons">
                 <button id="coinGameBtn">🪙 Münze werfen</button>
                 <button id="randomGameBtn">🎯 Random Chooser</button>
@@ -1215,7 +1304,7 @@
             </div>
             <div id="imposterResult" style="display:none;">
                 <div class="imposter-result-name" id="imposterStarterName"></div>
-                <div class="imposter-result-msg">fängt an</div>
+                <div class="imposter-result-msg" id="imposterStartsMsg">fängt an</div>
                 <button class="imposter-auflosung-btn" id="imposterAuflosungBtn">🔎 Auflösung</button>
             </div>
             <div id="imposterAuflosung" style="display:none;">
@@ -1308,6 +1397,431 @@
     </div>
 
 <script>
+    /* ------------------- LANGUAGE SWITCHING ------------------- */
+    const uiTranslations = {
+        de: {
+            startTitle: '🎲 Wähle ein Spiel 🎲',
+            coinGameBtn: '🪙 Münze werfen',
+            randomGameBtn: '🎯 Random Chooser',
+            drinkChoserBtn: '🍹 Drink Choser',
+            abendplanungBtn: '🍻 Abendplanung',
+            minigamesBtn: '🎮 Minigames',
+            coinTitle: '🪙 Münze werfen!',
+            flipCoinBtn: '✨ Wirf Münze! ✨',
+            backBtn: '← Zurück',
+            randomTitle: '🎯 Random Chooser',
+            magicButton: '✨ Klick mich! ✨',
+            nameInputPlaceholder: 'Neuer Name…',
+            addNameBtn: '+ Hinzufügen',
+            createGroupBtn: '👥 Gruppe erstellen',
+            minigamesTitle: '🎮 Minigames',
+            wweGameBtn: '🤔 Wer würde eher',
+            imposterGameBtn: '🕵️ Imposter',
+            wdeGameBtn: '⚖️ Würdest du eher',
+            wweTitle: '🤔 Wer würde eher',
+            wweInitText: 'Drücke den Knopf um eine Frage aufzudecken!',
+            wweRevealBtn: '🔍 Frage aufdecken',
+            wweBackBtn: '← Zurück zum Hauptmenü',
+            wweMinPlayers: 'Mindestens 2 Personen werden benötigt!',
+            wweNoQuestions: 'Keine Fragen geladen!',
+            wweQuestion: 'Frage',
+            wweSwapText: 'Neue Runde!<br>Personen werden getauscht!',
+            imposterCountLabel: 'Anzahl Imposter:',
+            imposterStartBtn: '🎮 Spiel starten',
+            imposterRevealBtn: '🔍 Rolle aufdecken',
+            imposterNextBtn: 'Weiter →',
+            imposterIsImposter: 'Du bist der Imposter',
+            imposterStartsMsg: 'fängt an',
+            imposterAuflosungBtn: '🔎 Auflösung',
+            imposterAuflosungTitle: '🔎 Auflösung',
+            imposterAuflosungCloseBtn: 'Schließen',
+            imposterAuflosungWordPrefix: 'Das Wort war: ',
+            imposterRoleImposter: '🕵️ Imposter',
+            imposterRoleNotImposter: '✅ Kein Imposter',
+            imposterMinPlayers: 'Mindestens 2 Spieler werden benötigt!',
+            imposterTooMany: 'Es müssen mehr Spieler als Imposter vorhanden sein!',
+            imposterNoWords: 'Keine Wörter geladen!',
+            wdeDivider: 'ODER',
+            dcTitle: '🍹 Drink Choser',
+            dcAssignBtn: '🍺 Jetzt zuweisen',
+            dcNoPlayers: 'Füge zuerst Spieler hinzu!',
+            dcNoDrinks: 'Keine Getränke verfügbar!',
+            apTitle: '🍻 Abendplanung',
+            apRandomizeBtn: '🎲 Randomize',
+            apRerollBtn: '🎲 Neu würfeln',
+            hackerTitle: 'Hacker-Konsole',
+            hackerSubtitle: '// Wahrscheinlichkeiten manipulieren',
+            coinHead: 'Kopf',
+            coinTail: 'Zahl',
+            groupNamePrompt: 'Gruppenname eingeben:'
+        },
+        en: {
+            startTitle: '🎲 Choose a Game 🎲',
+            coinGameBtn: '🪙 Flip a Coin',
+            randomGameBtn: '🎯 Random Chooser',
+            drinkChoserBtn: '🍹 Drink Chooser',
+            abendplanungBtn: '🍻 Evening Planner',
+            minigamesBtn: '🎮 Minigames',
+            coinTitle: '🪙 Flip a Coin!',
+            flipCoinBtn: '✨ Flip! ✨',
+            backBtn: '← Back',
+            randomTitle: '🎯 Random Chooser',
+            magicButton: '✨ Click me! ✨',
+            nameInputPlaceholder: 'New name…',
+            addNameBtn: '+ Add',
+            createGroupBtn: '👥 Create Group',
+            minigamesTitle: '🎮 Minigames',
+            wweGameBtn: '🤔 Who Would Rather',
+            imposterGameBtn: '🕵️ Imposter',
+            wdeGameBtn: '⚖️ Would You Rather',
+            wweTitle: '🤔 Who Would Rather',
+            wweInitText: 'Press the button to reveal a question!',
+            wweRevealBtn: '🔍 Reveal Question',
+            wweBackBtn: '← Back to Main Menu',
+            wweMinPlayers: 'At least 2 players are needed!',
+            wweNoQuestions: 'No questions loaded!',
+            wweQuestion: 'Question',
+            wweSwapText: 'New Round!<br>Swapping players!',
+            imposterCountLabel: 'Number of Imposters:',
+            imposterStartBtn: '🎮 Start Game',
+            imposterRevealBtn: '🔍 Reveal Role',
+            imposterNextBtn: 'Next →',
+            imposterIsImposter: 'You are the Imposter',
+            imposterStartsMsg: 'starts',
+            imposterAuflosungBtn: '🔎 Reveal',
+            imposterAuflosungTitle: '🔎 Reveal',
+            imposterAuflosungCloseBtn: 'Close',
+            imposterAuflosungWordPrefix: 'The word was: ',
+            imposterRoleImposter: '🕵️ Imposter',
+            imposterRoleNotImposter: '✅ Not Imposter',
+            imposterMinPlayers: 'At least 2 players are needed!',
+            imposterTooMany: 'There must be more players than imposters!',
+            imposterNoWords: 'No words loaded!',
+            wdeDivider: 'OR',
+            dcTitle: '🍹 Drink Chooser',
+            dcAssignBtn: '🍺 Assign Now',
+            dcNoPlayers: 'Add players first!',
+            dcNoDrinks: 'No drinks available!',
+            apTitle: '🍻 Evening Planner',
+            apRandomizeBtn: '🎲 Randomize',
+            apRerollBtn: '🎲 Reroll',
+            hackerTitle: 'Hacker Console',
+            hackerSubtitle: '// Manipulate probabilities',
+            coinHead: 'Heads',
+            coinTail: 'Tails',
+            groupNamePrompt: 'Enter group name:'
+        },
+        es: {
+            startTitle: '🎲 Elige un Juego 🎲',
+            coinGameBtn: '🪙 Lanzar Moneda',
+            randomGameBtn: '🎯 Selección Aleatoria',
+            drinkChoserBtn: '🍹 Elige Bebida',
+            abendplanungBtn: '🍻 Plan de Noche',
+            minigamesBtn: '🎮 Minijuegos',
+            coinTitle: '🪙 ¡Lanzar Moneda!',
+            flipCoinBtn: '✨ ¡Lanzar! ✨',
+            backBtn: '← Volver',
+            randomTitle: '🎯 Selección Aleatoria',
+            magicButton: '✨ ¡Púlsame! ✨',
+            nameInputPlaceholder: 'Nuevo nombre…',
+            addNameBtn: '+ Añadir',
+            createGroupBtn: '👥 Crear Grupo',
+            minigamesTitle: '🎮 Minijuegos',
+            wweGameBtn: '🤔 Quién preferiría',
+            imposterGameBtn: '🕵️ Impostor',
+            wdeGameBtn: '⚖️ ¿Qué preferirías?',
+            wweTitle: '🤔 Quién preferiría',
+            wweInitText: '¡Pulsa el botón para revelar una pregunta!',
+            wweRevealBtn: '🔍 Revelar Pregunta',
+            wweBackBtn: '← Volver al Menú',
+            wweMinPlayers: '¡Se necesitan al menos 2 jugadores!',
+            wweNoQuestions: '¡No hay preguntas cargadas!',
+            wweQuestion: 'Pregunta',
+            wweSwapText: '¡Nueva Ronda!<br>¡Cambiando jugadores!',
+            imposterCountLabel: 'Número de Impostores:',
+            imposterStartBtn: '🎮 Iniciar Juego',
+            imposterRevealBtn: '🔍 Revelar Rol',
+            imposterNextBtn: 'Siguiente →',
+            imposterIsImposter: 'Eres el Impostor',
+            imposterStartsMsg: 'empieza',
+            imposterAuflosungBtn: '🔎 Revelar',
+            imposterAuflosungTitle: '🔎 Revelar',
+            imposterAuflosungCloseBtn: 'Cerrar',
+            imposterAuflosungWordPrefix: 'La palabra era: ',
+            imposterRoleImposter: '🕵️ Impostor',
+            imposterRoleNotImposter: '✅ No Impostor',
+            imposterMinPlayers: '¡Se necesitan al menos 2 jugadores!',
+            imposterTooMany: '¡Debe haber más jugadores que impostores!',
+            imposterNoWords: '¡No hay palabras cargadas!',
+            wdeDivider: 'O',
+            dcTitle: '🍹 Elige Bebida',
+            dcAssignBtn: '🍺 Asignar Ahora',
+            dcNoPlayers: '¡Añade jugadores primero!',
+            dcNoDrinks: '¡No hay bebidas disponibles!',
+            apTitle: '🍻 Plan de Noche',
+            apRandomizeBtn: '🎲 Aleatorio',
+            apRerollBtn: '🎲 Volver a tirar',
+            hackerTitle: 'Consola Hacker',
+            hackerSubtitle: '// Manipular probabilidades',
+            coinHead: 'Cara',
+            coinTail: 'Cruz',
+            groupNamePrompt: 'Nombre del grupo:'
+        },
+        ar: {
+            startTitle: '🎲 اختر لعبة 🎲',
+            coinGameBtn: '🪙 رمي العملة',
+            randomGameBtn: '🎯 اختيار عشوائي',
+            drinkChoserBtn: '🍹 اختيار المشروب',
+            abendplanungBtn: '🍻 خطة المساء',
+            minigamesBtn: '🎮 ألعاب صغيرة',
+            coinTitle: '🪙 !ارمِ العملة',
+            flipCoinBtn: '✨ !ارمِ ✨',
+            backBtn: '← رجوع',
+            randomTitle: '🎯 اختيار عشوائي',
+            magicButton: '✨ !اضغطني ✨',
+            nameInputPlaceholder: '…اسم جديد',
+            addNameBtn: '+ إضافة',
+            createGroupBtn: '👥 إنشاء مجموعة',
+            minigamesTitle: '🎮 ألعاب صغيرة',
+            wweGameBtn: '🤔 من يفضّل',
+            imposterGameBtn: '🕵️ المحتال',
+            wdeGameBtn: '⚖️ هل تفضّل',
+            wweTitle: '🤔 من يفضّل',
+            wweInitText: '!اضغط الزر لكشف السؤال',
+            wweRevealBtn: '🔍 كشف السؤال',
+            wweBackBtn: '← العودة للقائمة الرئيسية',
+            wweMinPlayers: '!يجب أن يكون هناك لاعبان على الأقل',
+            wweNoQuestions: '!لم يتم تحميل أي أسئلة',
+            wweQuestion: 'سؤال',
+            wweSwapText: '!جولة جديدة<br>!تبديل اللاعبين',
+            imposterCountLabel: ':عدد المحتالين',
+            imposterStartBtn: '🎮 بدء اللعبة',
+            imposterRevealBtn: '🔍 كشف الدور',
+            imposterNextBtn: '← التالي',
+            imposterIsImposter: 'أنت المحتال',
+            imposterStartsMsg: 'يبدأ',
+            imposterAuflosungBtn: '🔎 الكشف',
+            imposterAuflosungTitle: '🔎 الكشف',
+            imposterAuflosungCloseBtn: 'إغلاق',
+            imposterAuflosungWordPrefix: 'الكلمة كانت: ',
+            imposterRoleImposter: '🕵️ محتال',
+            imposterRoleNotImposter: '✅ ليس محتال',
+            imposterMinPlayers: '!يجب أن يكون هناك لاعبان على الأقل',
+            imposterTooMany: '!يجب أن يكون عدد اللاعبين أكثر من المحتالين',
+            imposterNoWords: '!لم يتم تحميل أي كلمات',
+            wdeDivider: 'أو',
+            dcTitle: '🍹 اختيار المشروب',
+            dcAssignBtn: '🍺 تعيين الآن',
+            dcNoPlayers: '!أضف لاعبين أولاً',
+            dcNoDrinks: '!لا توجد مشروبات متاحة',
+            apTitle: '🍻 خطة المساء',
+            apRandomizeBtn: '🎲 عشوائي',
+            apRerollBtn: '🎲 إعادة',
+            hackerTitle: 'وحدة الهاكر',
+            hackerSubtitle: '// التلاعب بالاحتمالات',
+            coinHead: 'صورة',
+            coinTail: 'كتابة',
+            groupNamePrompt: ':أدخل اسم المجموعة'
+        },
+        zh: {
+            startTitle: '🎲 选择游戏 🎲',
+            coinGameBtn: '🪙 抛硬币',
+            randomGameBtn: '🎯 随机选择',
+            drinkChoserBtn: '🍹 饮品选择',
+            abendplanungBtn: '🍻 晚间计划',
+            minigamesBtn: '🎮 小游戏',
+            coinTitle: '🪙 抛硬币！',
+            flipCoinBtn: '✨ 抛！ ✨',
+            backBtn: '← 返回',
+            randomTitle: '🎯 随机选择',
+            magicButton: '✨ 点我！ ✨',
+            nameInputPlaceholder: '新名字…',
+            addNameBtn: '+ 添加',
+            createGroupBtn: '👥 创建小组',
+            minigamesTitle: '🎮 小游戏',
+            wweGameBtn: '🤔 谁更愿意',
+            imposterGameBtn: '🕵️ 卧底',
+            wdeGameBtn: '⚖️ 你更愿意',
+            wweTitle: '🤔 谁更愿意',
+            wweInitText: '按下按钮揭示问题！',
+            wweRevealBtn: '🔍 揭示问题',
+            wweBackBtn: '← 返回主菜单',
+            wweMinPlayers: '至少需要2名玩家！',
+            wweNoQuestions: '没有加载到问题！',
+            wweQuestion: '问题',
+            wweSwapText: '新一轮！<br>交换玩家！',
+            imposterCountLabel: '卧底人数：',
+            imposterStartBtn: '🎮 开始游戏',
+            imposterRevealBtn: '🔍 揭示身份',
+            imposterNextBtn: '下一个 →',
+            imposterIsImposter: '你是卧底',
+            imposterStartsMsg: '先开始',
+            imposterAuflosungBtn: '🔎 揭晓',
+            imposterAuflosungTitle: '🔎 揭晓',
+            imposterAuflosungCloseBtn: '关闭',
+            imposterAuflosungWordPrefix: '词语是：',
+            imposterRoleImposter: '🕵️ 卧底',
+            imposterRoleNotImposter: '✅ 非卧底',
+            imposterMinPlayers: '至少需要2名玩家！',
+            imposterTooMany: '玩家人数必须多于卧底人数！',
+            imposterNoWords: '没有加载到词语！',
+            wdeDivider: '或者',
+            dcTitle: '🍹 饮品选择',
+            dcAssignBtn: '🍺 立即分配',
+            dcNoPlayers: '请先添加玩家！',
+            dcNoDrinks: '没有可用的饮品！',
+            apTitle: '🍻 晚间计划',
+            apRandomizeBtn: '🎲 随机',
+            apRerollBtn: '🎲 重新投',
+            hackerTitle: '黑客控制台',
+            hackerSubtitle: '// 操纵概率',
+            coinHead: '正面',
+            coinTail: '反面',
+            groupNamePrompt: '输入小组名称：'
+        }
+    };
+
+    let currentLang = localStorage.getItem('appLang') || 'de';
+
+    function t(key) {
+        return (uiTranslations[currentLang] && uiTranslations[currentLang][key]) || uiTranslations.de[key] || key;
+    }
+
+    function getJsonPath(filename) {
+        if (currentLang === 'de') return filename;
+        return 'lang/' + currentLang + '/' + filename;
+    }
+
+    function loadAllJsonData() {
+        fetch(getJsonPath('abendplanung.json'))
+            .then(res => res.json())
+            .then(data => { apBars = data.bars || []; apMottos = data.mottos || []; })
+            .catch(() => { apBars = []; apMottos = []; });
+
+        fetch(getJsonPath('drinks.json'))
+            .then(res => res.json())
+            .then(data => { dcDrinks = data.drinks || []; })
+            .catch(() => { dcDrinks = []; });
+
+        fetch(getJsonPath('fragen_wer_wuerde.json'))
+            .then(res => res.json())
+            .then(data => { wweQuestions = data.questions || []; })
+            .catch(() => { wweQuestions = []; });
+
+        fetch(getJsonPath('woerter_imposter.json'))
+            .then(res => res.json())
+            .then(data => { imposterWords = data.woerter || []; })
+            .catch(() => { imposterWords = []; });
+
+        fetch(getJsonPath('wuerdestdueher.json'))
+            .then(res => res.json())
+            .then(data => { wdeQuestions = data.questions || []; })
+            .catch(() => { wdeQuestions = []; });
+    }
+
+    function applyUiTranslations() {
+        document.documentElement.lang = currentLang;
+
+        // Start screen
+        document.getElementById('startTitle').textContent = t('startTitle');
+        document.getElementById('coinGameBtn').textContent = t('coinGameBtn');
+        document.getElementById('randomGameBtn').textContent = t('randomGameBtn');
+        document.getElementById('drinkChoserBtn').textContent = t('drinkChoserBtn');
+        document.getElementById('abendplanungBtn').textContent = t('abendplanungBtn');
+        document.getElementById('minigamesBtn').textContent = t('minigamesBtn');
+
+        // Coin game
+        document.querySelector('#coinGame h2').textContent = t('coinTitle');
+        document.getElementById('flipCoinBtn').textContent = t('flipCoinBtn');
+        document.getElementById('backFromCoin').textContent = t('backBtn');
+
+        // Random chooser
+        document.querySelector('#randomGame h2').textContent = t('randomTitle');
+        document.getElementById('magicButton').textContent = t('magicButton');
+        document.getElementById('nameInput').placeholder = t('nameInputPlaceholder');
+        document.getElementById('addNameBtn').textContent = t('addNameBtn');
+        document.getElementById('randomCreateGroupBtn').textContent = t('createGroupBtn');
+        document.getElementById('backFromRandom').textContent = t('backBtn');
+
+        // Minigames
+        document.querySelector('#minigamesScreen h2').textContent = t('minigamesTitle');
+        document.getElementById('wweGameBtn').textContent = t('wweGameBtn');
+        document.getElementById('imposterGameBtn').textContent = t('imposterGameBtn');
+        document.getElementById('wdeGameBtn').textContent = t('wdeGameBtn');
+        document.getElementById('backFromMinigames').textContent = t('backBtn');
+
+        // Wer würde eher
+        document.querySelector('#wweGame .wwe-header h2').textContent = t('wweTitle');
+        document.getElementById('wweQuestionText').textContent = t('wweInitText');
+        document.getElementById('wweRevealBtn').textContent = t('wweRevealBtn');
+        document.getElementById('backFromWwe').textContent = t('wweBackBtn');
+
+        // Imposter setup
+        document.querySelector('#imposterSetup .imposter-count-label').textContent = t('imposterCountLabel');
+        document.getElementById('imposterNameInput').placeholder = t('nameInputPlaceholder');
+        document.getElementById('imposterAddNameBtn').textContent = t('addNameBtn');
+        document.getElementById('imposterCreateGroupBtn').textContent = t('createGroupBtn');
+        document.getElementById('imposterStartBtn').textContent = t('imposterStartBtn');
+        document.getElementById('imposterRevealBtn').textContent = t('imposterRevealBtn');
+        document.getElementById('imposterNextBtn').textContent = t('imposterNextBtn');
+        document.getElementById('imposterAuflosungBtn').textContent = t('imposterAuflosungBtn');
+        document.querySelector('#imposterAuflosung h2').textContent = t('imposterAuflosungTitle');
+        document.getElementById('imposterAuflosungCloseBtn').textContent = t('imposterAuflosungCloseBtn');
+        document.getElementById('imposterStartsMsg').textContent = t('imposterStartsMsg');
+
+        // Würdest du eher
+        document.querySelector('#wdeGame .wde-divider').textContent = t('wdeDivider');
+
+        // Drink Choser
+        document.querySelector('#drinkChoserSetup .dc-header h2').textContent = t('dcTitle');
+        document.getElementById('dcNameInput').placeholder = t('nameInputPlaceholder');
+        document.getElementById('dcAddNameBtn').textContent = t('addNameBtn');
+        document.getElementById('dcCreateGroupBtn').textContent = t('createGroupBtn');
+        document.getElementById('dcAssignBtn').textContent = t('dcAssignBtn');
+        document.querySelector('#drinkChoserResult .dc-header h2').textContent = t('dcTitle');
+
+        // Abendplanung
+        document.querySelector('#abendplanungGame .ap-header h2').textContent = t('apTitle');
+        document.getElementById('apRandomizeBtn').textContent = t('apRandomizeBtn');
+        document.getElementById('apRerollBtn').textContent = t('apRerollBtn');
+
+        // Hacker console
+        document.querySelector('.hacker-title').textContent = t('hackerTitle');
+        document.querySelector('.hacker-subtitle').textContent = t('hackerSubtitle');
+
+        // Language dropdown active state
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.classList.toggle('active', opt.dataset.lang === currentLang);
+        });
+    }
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('appLang', lang);
+        applyUiTranslations();
+        loadAllJsonData();
+        document.getElementById('langDropdown').classList.remove('open');
+    }
+
+    // Language button toggle
+    document.getElementById('langBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('langDropdown').classList.toggle('open');
+    });
+
+    // Language option clicks
+    document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setLanguage(opt.dataset.lang);
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        document.getElementById('langDropdown').classList.remove('open');
+    });
+
     /* ------------------- VIDEO BACKGROUND ------------------- */
     const videoFiles = [
         "media/subway.mp4",
@@ -1439,17 +1953,6 @@
     let apBars = [];
     let apMottos = [];
 
-    fetch('abendplanung.json')
-        .then(res => res.json())
-        .then(data => {
-            apBars = data.bars || [];
-            apMottos = data.mottos || [];
-        })
-        .catch(() => {
-            apBars = [];
-            apMottos = [];
-        });
-
     document.getElementById('abendplanungBtn').onclick = () => {
         startScreen.style.display = 'none';
         abendplanungGame.style.display = 'block';
@@ -1502,11 +2005,6 @@
 
     /* ------------------- DRINK CHOSER ------------------- */
     let dcDrinks = [];
-
-    fetch('drinks.json')
-        .then(res => res.json())
-        .then(data => { dcDrinks = data.drinks || []; })
-        .catch(() => { dcDrinks = []; });
 
     const drinkChoserSetup = document.getElementById('drinkChoserSetup');
     const drinkChoserAnimation = document.getElementById('drinkChoserAnimation');
@@ -1570,11 +2068,11 @@
 
     document.getElementById('dcAssignBtn').addEventListener('click', () => {
         if (names.length === 0) {
-            alert('Füge zuerst Spieler hinzu!');
+            alert(t('dcNoPlayers'));
             return;
         }
         if (dcDrinks.length === 0) {
-            alert('Keine Getränke verfügbar!');
+            alert(t('dcNoDrinks'));
             return;
         }
 
@@ -1693,7 +2191,7 @@
         coinResult.classList.remove('show');
         setTimeout(() => {
             btn.classList.remove('pulsing');
-            const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
+            const result = Math.random() < 0.5 ? t('coinHead') : t('coinTail');
             coinResult.textContent = result;
             coinResult.classList.add('show');
         }, 2000);
@@ -1706,12 +2204,7 @@
     let wwePerson1 = '';
     let wwePerson2 = '';
 
-    // Load questions from JSON
-    fetch('fragen_wer_wuerde.json')
-        .then(res => res.json())
-        .then(data => { wweQuestions = data.questions || []; })
-        .catch(() => { wweQuestions = []; });
-
+    // Load questions handled by loadAllJsonData()
     function pickTwoPersons() {
         if (names.length < 2) return;
         const idx1 = Math.floor(Math.random() * names.length);
@@ -1727,24 +2220,24 @@
         wweQuestionCount = 0;
         wweUsedQuestions = [];
         pickTwoPersons();
-        document.getElementById('wweQuestionText').textContent = 'Drücke den Knopf um eine Frage aufzudecken!';
+        document.getElementById('wweQuestionText').textContent = t('wweInitText');
         document.getElementById('wweCounter').textContent = '';
     }
 
     function resetWwe() {
         wweQuestionCount = 0;
         wweUsedQuestions = [];
-        document.getElementById('wweQuestionText').textContent = 'Drücke den Knopf um eine Frage aufzudecken!';
+        document.getElementById('wweQuestionText').textContent = t('wweInitText');
         document.getElementById('wweCounter').textContent = '';
     }
 
     document.getElementById('wweRevealBtn').addEventListener('click', () => {
         if (names.length < 2) {
-            document.getElementById('wweQuestionText').textContent = 'Mindestens 2 Personen werden benötigt!';
+            document.getElementById('wweQuestionText').textContent = t('wweMinPlayers');
             return;
         }
         if (wweQuestions.length === 0) {
-            document.getElementById('wweQuestionText').textContent = 'Keine Fragen geladen!';
+            document.getElementById('wweQuestionText').textContent = t('wweNoQuestions');
             return;
         }
 
@@ -1774,13 +2267,13 @@
         wweUsedQuestions.push(originalIndex);
         const questionText = document.getElementById('wweQuestionText');
         questionText.textContent = available[randomIndex];
-        document.getElementById('wweCounter').textContent = 'Frage ' + wweQuestionCount + ' / 5';
+        document.getElementById('wweCounter').textContent = t('wweQuestion') + ' ' + wweQuestionCount + ' / 5';
     }
 
     function showSwapAnimation(callback) {
         const overlay = document.createElement('div');
         overlay.className = 'wwe-swap-animation';
-        overlay.innerHTML = '<div class="wwe-swap-emoji">🔄</div><div class="wwe-swap-text">Neue Runde!<br>Personen werden getauscht!</div>';
+        overlay.innerHTML = '<div class="wwe-swap-emoji">🔄</div><div class="wwe-swap-text">' + t('wweSwapText') + '</div>';
         document.body.appendChild(overlay);
 
         setTimeout(() => {
@@ -1796,12 +2289,7 @@
     let imposterRoles = []; // { name, isImposter }
     let imposterWord = '';
 
-    // Load words from JSON
-    fetch('woerter_imposter.json')
-        .then(res => res.json())
-        .then(data => { imposterWords = data.woerter || []; })
-        .catch(() => { imposterWords = []; });
-
+    // Load words handled by loadAllJsonData()
     const imposterSetup = document.getElementById('imposterSetup');
     const imposterGame = document.getElementById('imposterGame');
 
@@ -1892,15 +2380,15 @@
     // Start game
     document.getElementById('imposterStartBtn').addEventListener('click', () => {
         if (names.length < 2) {
-            alert('Mindestens 2 Spieler werden benötigt!');
+            alert(t('imposterMinPlayers'));
             return;
         }
         if (imposterCount >= names.length) {
-            alert('Es müssen mehr Spieler als Imposter vorhanden sein!');
+            alert(t('imposterTooMany'));
             return;
         }
         if (imposterWords.length === 0) {
-            alert('Keine Wörter geladen!');
+            alert(t('imposterNoWords'));
             return;
         }
 
@@ -1941,7 +2429,7 @@
         const roleText = document.getElementById('imposterRoleText');
 
         if (player.isImposter) {
-            roleText.textContent = 'Du bist der Imposter';
+            roleText.textContent = t('imposterIsImposter');
             roleText.className = 'imposter-role-text imposter';
         } else {
             roleText.textContent = imposterWord;
@@ -1977,7 +2465,7 @@
         document.getElementById('imposterAuflosung').style.display = 'block';
 
         // Show the word
-        document.getElementById('imposterAuflosungWord').innerHTML = 'Das Wort war: <span>' + imposterWord + '</span>';
+        document.getElementById('imposterAuflosungWord').innerHTML = t('imposterAuflosungWordPrefix') + '<span>' + imposterWord + '</span>';
 
         // Build player list
         const list = document.getElementById('imposterAuflosungList');
@@ -1992,7 +2480,7 @@
 
             const roleSpan = document.createElement('span');
             roleSpan.className = 'player-role';
-            roleSpan.textContent = player.isImposter ? '🕵️ Imposter' : '✅ Kein Imposter';
+            roleSpan.textContent = player.isImposter ? t('imposterRoleImposter') : t('imposterRoleNotImposter');
 
             item.appendChild(nameSpan);
             item.appendChild(roleSpan);
@@ -2017,11 +2505,7 @@
     let wdeTimer = null;
     let wdeClickable = true;
 
-    fetch('wuerdestdueher.json')
-        .then(res => res.json())
-        .then(data => { wdeQuestions = data.questions || []; })
-        .catch(() => { wdeQuestions = []; });
-
+    // Load questions handled by loadAllJsonData()
     function pickWdeQuestion() {
         if (wdeQuestions.length === 0) return null;
         if (wdeUsedQuestions.length >= wdeQuestions.length) {
@@ -2092,10 +2576,10 @@
 
     function createGroup() {
         if (names.length === 0) {
-            alert('Füge zuerst Spieler hinzu!');
+            alert(t('dcNoPlayers'));
             return;
         }
-        const groupName = prompt('Gruppenname eingeben:');
+        const groupName = prompt(t('groupNamePrompt'));
         if (groupName && groupName.trim()) {
             savedGroups.push({
                 name: groupName.trim(),
@@ -2300,6 +2784,10 @@
             container.appendChild(row);
         });
     }
+
+    // Initialize language and load data
+    loadAllJsonData();
+    applyUiTranslations();
 
 </script>
 </body>
